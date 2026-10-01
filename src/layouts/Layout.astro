@@ -1,23 +1,94 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+import { getLang, getLocalePath, getDocPath, localeList } from "../i18n/utils";
+import { htmlLang, defaultLang } from "../i18n/ui";
+
+const lang = getLang(Astro.url);
+const site = Astro.site ?? Astro.url;
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Doc slug without language ("privacy"). When omitted, hreflang points to the home. */
+  slug?: string;
+}
+
+const { title = "Update Wise", description, slug } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site).toString();
+const pagePath = (l: (typeof localeList)[number]) =>
+  slug ? getDocPath(l, slug) : getLocalePath(l);
+const pageUrl = (l: (typeof localeList)[number]) =>
+  new URL(pagePath(l), site).toString();
+// TODO(art): add <meta property="og:image"> once the artwork is ready (1200×630).
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0D933B" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:locale" content={htmlLang[lang].replace("-", "_")} />
+    {
+      localeList
+        .filter((l) => l !== lang)
+        .map((l) => (
+          <meta
+            property="og:locale:alternate"
+            content={htmlLang[l].replace("-", "_")}
+          />
+        ))
+    }
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+
+    {
+      localeList.map((l) => (
+        <link rel="alternate" hreflang={htmlLang[l]} href={pageUrl(l)} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={pageUrl(defaultLang)} />
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        document.documentElement.dataset.theme = savedTheme;
+      } else {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
+          ? "dark"
+          : "light";
+        document.documentElement.dataset.theme = systemTheme;
+      }
+    </script>
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 </style>

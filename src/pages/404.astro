@@ -1,0 +1,178 @@
+---
+// Static pages render once, so the 404 recovery message ships in all four languages.
+import Layout from "../layouts/Layout.astro";
+import { languages } from "../i18n/ui";
+import { getLocalePath, localeList, useTranslations } from "../i18n/utils";
+---
+
+<Layout title="404 — Update Wise">
+  <main>
+    <section id="not-found">
+      <header class="section-header">
+        <p class="eyebrow">Error 404</p>
+        <h1 class="code">404</h1>
+      </header>
+
+      <div class="not-found-grid">
+        {
+          localeList.map((lang) => {
+            const t = useTranslations(lang);
+            return (
+              <article class="not-found-card" lang={lang}>
+                <p class="card-lang">{languages[lang]}</p>
+                <h2>{t("notfound.title")}</h2>
+                <p>{t("notfound.text")}</p>
+                <a href={getLocalePath(lang)} class="not-found-button">
+                  {t("notfound.back")}
+                </a>
+              </article>
+            );
+          })
+        }
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  #not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    padding: 5rem 1rem;
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(100%, 60rem);
+
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+
+    color: var(--color-primary);
+
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .code {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .not-found-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+
+    width: min(calc(100% - 2rem), 60rem);
+
+    margin-top: 2rem;
+  }
+
+  .not-found-card {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    padding: 1rem;
+
+    background-color: var(--color-surface);
+
+    border: 1px solid var(--color-surface-secondary);
+    border-radius: 1.5rem;
+
+    box-shadow: 0 2px 8px rgb(15 26 36 / 4%);
+  }
+
+  .card-lang {
+    margin: 0 0 0.5rem;
+
+    color: var(--color-primary);
+
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .not-found-card h2 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .not-found-card p {
+    margin: 0.6rem 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.7rem;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .not-found-card p:last-of-type {
+    margin-bottom: 1rem;
+  }
+
+  .not-found-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 2.2rem;
+
+    margin-top: auto;
+
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: 0.6rem;
+
+    color: var(--color-text-ligther);
+    text-decoration: none;
+
+    font-size: 0.7rem;
+    font-weight: 400;
+
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .not-found-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .not-found-button:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 900px) {
+    .not-found-grid {
+      grid-template-columns: 1fr;
+      width: min(calc(100% - 2rem), 30rem);
+    }
+  }
+</style>

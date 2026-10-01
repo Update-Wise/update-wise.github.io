@@ -1,0 +1,62 @@
+---
+import { languages, type Lang } from "../i18n/ui";
+import { getLang, useTranslations, getLocalePath } from "../i18n/utils";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<select id="lang-select" aria-label={t("lang.label")}>
+  {
+    (Object.entries(languages) as [Lang, string][]).map(([code, label]) => (
+      <option value={getLocalePath(code)} selected={code === lang}>
+        {label}
+      </option>
+    ))
+  }
+</select>
+
+<script>
+  const select = document.querySelector<HTMLSelectElement>("#lang-select");
+
+  // Keep the current section (#pricing, #about...) across the language switch
+  select?.addEventListener("change", () => {
+    window.location.href = select.value + window.location.hash;
+  });
+</script>
+
+<style>
+  #lang-select {
+    height: 2.25rem;
+    max-width: 8.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--color-surface-outline);
+    border-radius: 0.6rem;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  #lang-select:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-secondary);
+  }
+
+  #lang-select:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 700px) {
+    #lang-select {
+      height: 2rem;
+      max-width: 6.5rem;
+      font-size: 0.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+import { getLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+
+const t = useTranslations(getLang(Astro.url));
+
+const steps = [
+  { id: "step1", modifier: "step-number--detect" },
+  { id: "step2", modifier: "step-number--analyze" },
+  { id: "step3", modifier: "step-number--improve" },
+] as const;
+
+const k = (id: string, suffix: string) => `how.${id}.${suffix}` as UIKey;
+---
+
+<section id="how-it-works">
+  <header class="section-header">
+    <p class="eyebrow">{t("how.eyebrow")}</p>
+
+    <h2>
+      {t("how.title1")}<br />
+      {t("how.title2")}
+    </h2>
+  </header>
+
+  <ol class="steps">
+    {
+      steps.map((step, index) => (
+        <li class="step">
+          <span class={`step-number ${step.modifier}`}>{index + 1}</span>
+          <div class="step-content">
+            <h3>{t(k(step.id, "title"))}</h3>
+            <p class="description">{t(k(step.id, "desc"))}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  #how-it-works {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+
+    width: min(calc(100% - 2rem), 60rem);
+
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+  }
+
+  .step {
+    min-width: 0;
+
+    display: flex;
+    gap: 0.75rem;
+
+    padding: 1rem;
+
+    border-radius: 2rem;
+    outline: 1px solid var(--color-surface-outline);
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    text-align: left;
+
+    min-width: 0;
+    padding-bottom: 4rem;
+  }
+
+  .step-number {
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    width: 2rem;
+    height: 2rem;
+
+    border-radius: 50%;
+
+    color: var(--color-text-ligther);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .step-number--detect {
+    background-color: var(--color-error);
+  }
+
+  .step-number--analyze {
+    background-color: var(--color-warning);
+  }
+
+  .step-number--improve {
+    background-color: var(--color-sucess);
+  }
+
+  h3 {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .steps {
+      padding: 1rem;
+      grid-template-columns: 1fr;
+      width: 20rem;
+    }
+  }
+</style>

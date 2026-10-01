@@ -1,0 +1,248 @@
+---
+import Github from "../assets/github.svg";
+import LanguageSelector from "./Languageselector.astro";
+import { getLang, useTranslations, getLocalePath } from "../i18n/utils";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<header class="header">
+  <div class="BrandHeader">
+    <div class="Logo" id="HeroLogo"></div>
+    <a
+      class="Title"
+      id="HeroTitle"
+      href={getLocalePath(lang)}
+      aria-label="Update Wise"
+    >
+      update wise
+    </a>
+  </div>
+
+  <nav>
+    <a href="#about">{t("nav.about")}</a>
+    <a href="#contact">{t("nav.contact")}</a>
+    <a href="#download">{t("nav.download")}</a>
+    <a href="#pricing">{t("nav.pricing")}</a>
+    <a
+      href="https://github.com/Update-Wise/Update-Wise-Main"
+      target="_blank"
+      rel="noopener noreferrer"
+      id="GithubLink"
+      aria-label="GitHub"
+    >
+      <Github class="Logo" id="GithubLogo" />
+    </a>
+
+    <LanguageSelector />
+
+    <button
+      id="theme-toggle"
+      type="button"
+      aria-label={t("theme.toggle")}
+      data-label-to-light={t("theme.toLight")}
+      data-label-to-dark={t("theme.toDark")}
+    >
+      ☾
+    </button>
+
+    <script>
+      const themeToggle = document.querySelector("#theme-toggle");
+
+      if (themeToggle instanceof HTMLButtonElement) {
+        // Translated labels reach the client script via data-* attributes
+        const labelToLight = themeToggle.dataset.labelToLight ?? "";
+        const labelToDark = themeToggle.dataset.labelToDark ?? "";
+
+        const updateThemeIcon = () => {
+          const isDark = document.documentElement.dataset.theme === "dark";
+          themeToggle.textContent = isDark ? "☀" : "☾";
+          themeToggle.setAttribute(
+            "aria-label",
+            isDark ? labelToLight : labelToDark,
+          );
+        };
+
+        themeToggle.addEventListener("click", () => {
+          const html = document.documentElement;
+          const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
+          html.dataset.theme = newTheme;
+          localStorage.setItem("theme", newTheme);
+          updateThemeIcon();
+        });
+
+        updateThemeIcon();
+      }
+    </script>
+  </nav>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    margin-inline: auto;
+    width: min(calc(100% - 2rem), 80rem);
+    z-index: 100;
+    height: clamp(100px, 6vw, 132px);
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    outline: 1px solid var(--color-surface-outline);
+    border-radius: 0.75rem;
+
+    backdrop-filter: blur(24px) saturate(130%);
+    -webkit-backdrop-filter: blur(24px) saturate(130%);
+
+    box-shadow:
+      0 8px 32px rgb(15 26 36 / 10%),
+      inset 0 1px 0 rgb(255 255 255 / 50%);
+
+    [data-effects="reduced"] * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .BrandHeader {
+    display: flex;
+    gap: clamp(0.75rem, 1vw, 1rem);
+    height: 100%;
+    align-items: center;
+  }
+
+  nav {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    gap: 0.75rem;
+    a {
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      transition: background-color 0.5s ease-in-out;
+    }
+
+    a:hover {
+      color: var(--color-text-primary);
+    }
+  }
+
+  #GithubLink {
+    display: inline-flex;
+    height: fit-content;
+  }
+
+  .Logo {
+    height: 4rem;
+    aspect-ratio: 1;
+  }
+
+  #GithubLogo {
+    fill: var(--color-text-secondary);
+    transition: fill 0.5s ease-out;
+  }
+
+  #GithubLogo:hover {
+    fill: var(--color-text-primary);
+  }
+
+  #HeroLogo {
+    background-color: #d9d9d9;
+    border-radius: 0.75rem;
+  }
+
+  .Title {
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    font-weight: 400;
+    text-decoration: none;
+  }
+  #theme-toggle {
+    display: grid;
+    place-items: center;
+
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: 0.6rem;
+
+    background: transparent;
+    color: var(--color-text-secondary);
+
+    font-size: 1.1rem;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  #theme-toggle:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-secondary);
+  }
+
+  #theme-toggle:active {
+    transform: translateY(1px);
+  }
+
+  #theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 700px) {
+    #theme-toggle {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .header {
+      width: min(calc(100% - 2rem), 50rem);
+    }
+
+    nav {
+      gap: 0.5rem;
+    }
+
+    nav a {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .header {
+      width: min(calc(100% - 1rem), 40rem);
+      padding: 0.65rem 0.75rem;
+    }
+
+    #GithubLogo {
+      height: auto;
+    }
+
+    nav a:not(#GithubLink) {
+      display: none;
+    }
+
+    #GithubLink {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+</style>

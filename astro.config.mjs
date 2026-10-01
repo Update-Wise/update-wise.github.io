@@ -1,5 +1,14 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
-export default defineConfig({});
+// TODO: replace `site` with the final domain once available.
+export default defineConfig({
+    site: "https://updatewise.example.com",
+    integrations: [sitemap()],
+    i18n: {
+        defaultLocale: "es",
+        locales: ["es", "en", "pt", "zh"],
+        routing: {prefixDefaultLocale: false},
+    }
+});

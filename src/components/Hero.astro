@@ -1,0 +1,178 @@
+---
+import { getLang, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(getLang(Astro.url));
+---
+<header class="hero">
+  <div class="hero-content">
+    <p class="eyebrow">{t("hero.eyebrow")}</p>
+    <h1 class="Hero_text" id="title">
+      <span>{t("hero.title1")}</span>
+      <span id="span2">{t("hero.title2")}</span>
+    </h1>
+    <p class="description">
+      {t("hero.subtitle")}
+    </p>
+    <div class="ctacontainer">
+      <a class="cta" id="cta1" href="#download">
+        <span>{t("hero.cta1")}</span>
+      </a>
+      <a class="cta" id="cta2" href="#how-it-works">
+        <span>{t("hero.cta2")}</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-image-wrapper">
+    <img
+      alt="Update Wise app preview"
+      src="/images/landing/app-mock.jpg"
+      loading="lazy"
+    />
+  </div>
+</header>
+
+<style>
+  .hero {
+    display: flex;
+    min-height: calc(100dvh - 7.5rem);
+    align-items: center;
+  }
+
+  .hero-content,
+  .hero-image-wrapper {
+    flex: 1;
+    padding: 1rem;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-image-wrapper {
+    display: flex;
+    place-content: end;
+    row-gap: 1rem;
+    display: inline-block;
+  }
+
+  .hero-image-wrapper img {
+    width: 100%;
+    height: auto;
+
+    border-radius: 0.75rem;
+    box-shadow: -12px 12px 4 0 #0000006f;
+    background: transparent !important;
+  }
+
+  #title {
+    span {
+      display: block;
+    }
+
+    #span2 {
+      color: var(--color-primary);
+    }
+
+    font-size: 2rem;
+  }
+
+  .ctacontainer {
+    display: flex;
+    margin-top: 3rem;
+    gap: 1rem;
+  }
+
+  .cta {
+    cursor: pointer;
+    display: flex;
+    width: 200px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 4 0 #0000006f;
+    border-radius: 0.75rem;
+    transition: transform 0.1s ease-in-out;
+    span {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      font-size: 0.75rem;
+      font-weight: 200;
+      pointer-events: min-content;
+    }
+  }
+
+  #cta1 {
+    background-color: var(--color-primary-darkend);
+
+    span {
+      color: var(--color-text-ligther);
+    }
+  }
+  #cta2 {
+    outline: 1px var(--neutral-100);
+
+    backdrop-filter: blur(24px) saturate(150%);
+
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 20%),
+      inset 0 -1px 0 rgb(0 0 0 / 20%),
+      0 4px 4 0 #0000006f;
+
+    span {
+      text-decoration: none;
+    }
+    [data-effects="reduced"] * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  .cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .cta:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 900px) {
+    .hero-content {
+      align-items: center;
+      text-align: center;
+      p {
+        justify-content: center;
+      }
+    }
+    .hero {
+      flex-direction: column;
+    }
+
+    .hero-image-wrapper img {
+      width: 25rem;
+    }
+  }
+</style>
+<style is:global>
+  .description {
+    font-weight: 200;
+    font-size: 0.75rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+
+    color: var(--color-primary);
+
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+</style>

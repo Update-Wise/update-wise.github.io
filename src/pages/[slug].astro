@@ -1,0 +1,16 @@
+---
+// Default locale (es) docs live at /<slug> — see docs/routing.
+import { getCollection } from "astro:content";
+import DocPage from "../components/DocPage.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("pages");
+  return entries
+    .filter((e) => e.id.startsWith("es/"))
+    .map((entry) => ({ params: { slug: entry.id.slice(3) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<DocPage entry={entry} />

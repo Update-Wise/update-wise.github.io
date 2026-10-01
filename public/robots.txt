@@ -1,0 +1,5 @@
+# TODO: actualizar el dominio cuando el proyecto tenga uno final.
+User-agent: *
+Allow: /
+
+Sitemap: https://updatewise.example.com/sitemap-index.xml

@@ -1,0 +1,22 @@
+---
+// Shared home content: Header and Footer come from Layout, so pages stay one-liners.
+import Layout from "../layouts/Layout.astro";
+import Hero from "./Hero.astro";
+import Problem from "./section1.astro";
+import HowItWorks from "./comoFunciona.astro";
+import Features from "./keycapabilities.astro";
+import Pricing from "./Pricing.astro";
+import { getLang, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(getLang(Astro.url));
+---
+
+<Layout title={t("seo.title")} description={t("seo.description")}>
+  <main>
+    <Hero />
+    <Problem />
+    <HowItWorks />
+    <Features />
+    <Pricing />
+  </main>
+</Layout>

@@ -1,0 +1,29 @@
+---
+// Non-default locale docs at /<lang>/<slug>, falling back to es when untranslated.
+import { getCollection } from "astro:content";
+import DocPage from "../../components/DocPage.astro";
+import { localeList } from "../../i18n/utils";
+import { defaultLang } from "../../i18n/ui";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("pages");
+  const slugs = [...new Set(entries.map((e) => e.id.split("/").slice(1).join("/")))];
+
+  return slugs.flatMap((slug) =>
+    localeList
+      .filter((l) => l !== defaultLang)
+      .map((lang) => ({
+        params: { lang, slug },
+        props: {
+          entry:
+            entries.find((e) => e.id === `${lang}/${slug}`) ??
+            entries.find((e) => e.id === `${defaultLang}/${slug}`),
+        },
+      })),
+  );
+}
+
+const { entry } = Astro.props;
+---
+
+<DocPage entry={entry} />

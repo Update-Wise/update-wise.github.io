@@ -1,0 +1,276 @@
+---
+import { getLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+
+const t = useTranslations(getLang(Astro.url));
+
+const plans = [
+  { id: "free", price: 0, href: "#download", featured: false },
+  { id: "pro", price: 9, href: "#download", featured: true },
+  { id: "team", price: 29, href: "#contact", featured: false },
+] as const;
+
+const k = (id: string, suffix: string) => `plan.${id}.${suffix}` as UIKey;
+---
+
+<section id="pricing">
+  <header class="section-header">
+    <p class="eyebrow">{t("pricing.eyebrow")}</p>
+
+    <h2>{t("pricing.title")}</h2>
+  </header>
+
+  <div class="pricing-grid">
+    {
+      plans.map((plan) => (
+        <article
+          class:list={[
+            "pricing-card",
+            { "pricing-card--featured": plan.featured },
+          ]}
+        >
+          <div class="pricing-card-header">
+            {plan.featured ? (
+              <div class="pricing-title">
+                <h3>{t(k(plan.id, "name"))}</h3>
+                <span class="popular">{t("pricing.popular")}</span>
+              </div>
+            ) : (
+              <h3>{t(k(plan.id, "name"))}</h3>
+            )}
+
+            <p>{t(k(plan.id, "desc"))}</p>
+          </div>
+
+          <div class="price">
+            <strong>${plan.price}</strong>
+            <span>{t("pricing.perMonth")}</span>
+          </div>
+
+          <ul class="features">
+            <li>{t(k(plan.id, "f1"))}</li>
+            <li>{t(k(plan.id, "f2"))}</li>
+            <li>{t(k(plan.id, "f3"))}</li>
+          </ul>
+
+          <a href={plan.href} class="pricing-button">
+            {t(k(plan.id, "cta"))}
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  #pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    padding: 5rem 1rem;
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(100%, 60rem);
+
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+
+    color: var(--color-primary);
+
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .section-header h2 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+
+    width: min(calc(100% - 2rem), 60rem);
+
+    margin-top: 2rem;
+  }
+
+  .pricing-card {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 16rem;
+
+    padding: 1rem;
+
+    background-color: var(--color-surface);
+
+    border: 1px solid var(--color-surface-secondary);
+    border-radius: 1.5rem;
+
+    box-shadow: 0 2px 8px rgb(15 26 36 / 4%);
+  }
+
+  .pricing-card--featured {
+    border: 1.5px solid var(--color-primary);
+  }
+
+  .pricing-card-header h3 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .pricing-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .popular {
+    padding: 0.3rem 0.7rem;
+
+    background-color: var(--color-primary);
+    border-radius: 999px;
+
+    color: var(--color-text-ligther);
+
+    font-size: 0.6rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .pricing-card-header p {
+    margin: 0.6rem 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.7rem;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+
+    margin-top: 0.8rem;
+  }
+
+  .price strong {
+    color: var(--color-text-primary);
+
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .price span {
+    margin-left: 0.3rem;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.6rem;
+    font-weight: 300;
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    padding: 0;
+    margin: 1rem 0;
+
+    list-style: none;
+  }
+
+  .features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    color: var(--color-text-primary);
+
+    font-size: 0.65rem;
+    font-weight: 300;
+  }
+
+  .features li::before {
+    content: "✓";
+
+    color: var(--color-primary);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .pricing-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 2.2rem;
+
+    margin-top: auto;
+
+    border: 1px solid var(--color-surface-secondary);
+    border-radius: 0.6rem;
+
+    color: var(--color-text-primary);
+    text-decoration: none;
+
+    font-size: 0.7rem;
+    font-weight: 400;
+
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .pricing-card--featured .pricing-button {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    color: var(--color-text-ligther);
+  }
+
+  .pricing-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .pricing-button:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 900px) {
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      width: min(calc(100% - 2rem), 30rem);
+    }
+  }
+</style>

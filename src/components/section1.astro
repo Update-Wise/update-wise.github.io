@@ -1,0 +1,50 @@
+---
+import { getLang, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(getLang(Astro.url));
+---
+<section id="problem">
+  <div class="section-content">
+    <p class="eyebrow">{t("problem.eyebrow")}</p>
+    <h2>{t("problem.title")}</h2>
+    <p id="description">
+      {t("problem.text1")}
+      <br />
+      {t("problem.text2")}
+    </p>
+  </div>
+</section>
+
+<style>
+  #problem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 7rem;
+    margin-bottom: 7rem;
+  }
+
+  #label {
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--color-primary);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  #description {
+    font-weight: 200;
+    font-size: 0.75rem;
+  }
+
+  .section-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100%, 60rem);
+    padding: 0 1rem;
+  }
+</style>

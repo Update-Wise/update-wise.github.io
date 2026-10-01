@@ -1,0 +1,172 @@
+---
+// Header and Footer come from Layout, so they are not duplicated here.
+import Layout from "./Layout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  updatedAt?: string;
+  /** Doc slug without language ("privacy"). When omitted, hreflang points to the home. */
+  slug?: string;
+}
+
+// Also accepts legacy `frontmatter` prop from plain .md layouts.
+const legacy = (Astro.props as { frontmatter?: Props }).frontmatter;
+const { title, description, eyebrow, updatedAt, slug } =
+  legacy ?? (Astro.props as Props);
+---
+
+<Layout title={title} description={description} slug={slug}>
+  <main class="markdown-page">
+    <header class="markdown-header">
+      {eyebrow && <p class="markdown-eyebrow">{eyebrow}</p>}
+
+      <h1>{title}</h1>
+
+      {description && <p class="markdown-description">{description}</p>}
+
+      {updatedAt && <time datetime={updatedAt}>Actualizado: {updatedAt}</time>}
+    </header>
+
+    <article class="markdown-content">
+      <slot />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .markdown-page {
+    width: min(calc(100% - 2rem), 50rem);
+    margin-inline: auto;
+    padding: 7rem 0 6rem;
+    box-sizing: border-box;
+  }
+
+  .markdown-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .markdown-eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--color-primary);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .markdown-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  .markdown-description {
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .markdown-header time {
+    display: block;
+    margin-top: 1rem;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+  }
+
+  .markdown-content {
+    width: 100%;
+    max-width: 50rem;
+    min-width: 0;
+
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+
+    overflow-wrap: break-word;
+  }
+
+  .markdown-content :global(h2) {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .markdown-content :global(h3) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .markdown-content :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .markdown-content :global(ul),
+  .markdown-content :global(ol) {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .markdown-content :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .markdown-content :global(a) {
+    color: var(--color-primary);
+  }
+
+  .markdown-content :global(strong) {
+    font-weight: 500;
+  }
+
+  .markdown-content :global(code) {
+    padding: 0.15rem 0.35rem;
+    background-color: var(--color-surface-secondary);
+    border-radius: 0.35rem;
+    font-size: 0.85em;
+  }
+
+  .markdown-content :global(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1rem;
+    background-color: var(--color-surface-darkend);
+    border-radius: 0.75rem;
+    color: var(--color-text-ligther);
+    font-size: 0.8rem;
+  }
+
+  .markdown-content :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--color-primary);
+    background-color: var(--color-surface-secondary);
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 700px) {
+    .markdown-page {
+      width: min(calc(100% - 2rem), 50rem);
+      padding-top: 5rem;
+    }
+
+    .markdown-header h1 {
+      font-size: 2rem;
+    }
+
+    .markdown-content {
+      font-size: 0.85rem;
+    }
+  }
+</style>

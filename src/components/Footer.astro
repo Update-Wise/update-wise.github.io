@@ -1,0 +1,305 @@
+---
+import Github from "../assets/github.svg";
+import Discord from "../assets/discordico.svg";
+import { getLang, useTranslations, getLocalePath, getDocPath } from "../i18n/utils";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div>
+        <a href={getLocalePath(lang)} class="footer-title">update wise</a>
+
+        <p class="footer-description">
+          {t("footer.tagline")}
+        </p>
+
+        <div class="footer-socials">
+          <a
+            href="https://github.com/Update-Wise/Update-Wise-Main"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <span>
+              <Github class="Github" />
+            </span>
+          </a>
+
+          <a href="#" aria-label="Twitter">
+            <span>𝕏</span>
+          </a>
+
+          <a href="#" aria-label="Discord">
+            <span>
+              <Discord />
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <div class="footer-column">
+        <h3>{t("footer.product")}</h3>
+
+        <a href="#how-it-works">{t("footer.product.how")}</a>
+        <a href="#features">{t("footer.product.features")}</a>
+        <a href="#pricing">{t("footer.product.pricing")}</a>
+        <a href="#download">{t("footer.product.download")}</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>{t("footer.company")}</h3>
+
+        <a href="#about">{t("footer.company.about")}</a>
+        <a href="#contact">{t("footer.company.contact")}</a>
+        <a href="#blog">{t("footer.company.blog")}</a>
+        <a href={getDocPath(lang, "privacy")}>{t("footer.company.privacy")}</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>{t("footer.support")}</h3>
+
+        <a href="#help">{t("footer.support.help")}</a>
+        <a href="#faq">{t("footer.support.faq")}</a>
+        <a href="#status">{t("footer.support.status")}</a>
+        <a href="#contact">{t("footer.support.contact")}</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <p>{t("footer.rights")}</p>
+
+    <nav class="footer-legal" aria-label="Legal">
+      <a href={getDocPath(lang, "terms")}>{t("footer.terms")}</a>
+      <a href={getDocPath(lang, "privacy")}>{t("footer.privacy")}</a>
+      <a href={getDocPath(lang, "cookies")}>{t("footer.cookies")}</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    width: 100%;
+    padding: 4rem max(1.5rem, 4vw) 2rem;
+    background-color: var(--neutral-900);
+    color: var(--neutral-50);
+    border-top: 3px solid var(--color-primary);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: minmax(15rem, 1fr) 1.8fr;
+
+    gap: 4rem;
+
+    width: min(100%, 70rem);
+    margin-inline: auto;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: row;
+
+    align-items;
+  }
+
+  .footer-title {
+    color: var(--neutral-50);
+
+    font-size: 1.4rem;
+    font-weight: 300;
+
+    line-height: 1;
+
+    text-decoration: none;
+  }
+
+  .footer-description {
+    max-width: 18rem;
+
+    margin: 0.75rem 0 1rem;
+
+    color: var(--neutral-300);
+
+    font-size: 0.7rem;
+    font-weight: 300;
+    line-height: 1.45;
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .footer-socials a {
+    display: grid;
+    place-items: center;
+
+    width: 1.75rem;
+    height: 1.75rem;
+
+    border-radius: 50%;
+
+    background-color: var(--neutral-50);
+
+    color: var(--neutral-900);
+
+    text-decoration: none;
+
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .footer-socials a:hover {
+    transform: translateY(-2px);
+
+    background-color: var(--color-primary);
+
+    color: var(--neutral-0);
+  }
+
+  .footer-socials a:active {
+    transform: translateY(1px);
+  }
+
+  .footer-socials span {
+    font-size: 0.55rem;
+    font-weight: 600;
+  }
+
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 2rem;
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 0.55rem;
+  }
+
+  .footer-column h3 {
+    margin: 0 0 0.15rem;
+
+    color: var(--neutral-50);
+
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+
+  .footer-column a {
+    color: var(--neutral-300);
+
+    font-size: 0.65rem;
+    font-weight: 300;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+  }
+
+  .footer-column a:hover {
+    color: var(--neutral-0);
+  }
+
+  .footer-divider {
+    width: min(100%, 70rem);
+
+    height: 1px;
+
+    margin: 2rem auto;
+
+    background-color: var(--neutral-500);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    width: min(100%, 70rem);
+
+    margin-inline: auto;
+  }
+
+  .footer-bottom p {
+    margin: 0;
+
+    color: var(--neutral-300);
+
+    font-size: 0.6rem;
+    font-weight: 300;
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-legal a {
+    color: var(--neutral-300);
+
+    font-size: 0.6rem;
+    font-weight: 300;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+  }
+
+  .footer-legal a:hover {
+    color: var(--neutral-0);
+  }
+
+  @media (max-width: 800px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .footer-nav {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 550px) {
+    .footer {
+      padding-inline: 1.25rem;
+    }
+
+    .footer-nav {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .footer-legal {
+      gap: 1rem;
+    }
+  }
+
+  .Github {
+     fill: var(--color-text-primary);
+  }
+</style>

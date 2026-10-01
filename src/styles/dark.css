@@ -1,0 +1,22 @@
+@import "./tokens.css";
+
+[data-theme="dark"] {
+    --color-background        : var(--neutral-950);
+    --color-surface           : var(--neutral-800);
+    --color-surface-secondary : var(--neutral-900);
+    --color-surface-darkend   : var(--neutral-700);
+    --color-surface-outline   : var(--neutral-700);
+
+    --color-text-primary           : var(--neutral-50);
+    --color-text-secondary:        : var(--neutral-100);
+    --color-text-highligth         : var(--blue-300);
+    --color-text-ligther           : var(--neutral-950);
+    --color-text-ligther-highligth : var(--neutral-100);
+
+    --color-primary         : var(--green-500);
+    --color-primary-darkend : var(--green-600);
+
+    --color-sucess : var(--green-500);
+    --color-warning: var(--amber-500);
+    --color-error  : var(--red-500);
+}

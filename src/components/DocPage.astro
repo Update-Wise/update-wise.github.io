@@ -1,0 +1,27 @@
+---
+import { render } from "astro:content";
+import MarkdownLayout from "../layouts/MarkdownLayout.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"pages">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+// Legacy `updateAt` key (missing "d") used by the original .md files
+const { title, description, eyebrow } = entry.data;
+const updatedAt = entry.data.updatedAt ?? entry.data.updateAt;
+// Slug without language prefix ("es/privacy" -> "privacy") for per-page hreflang
+const slug = entry.id.split("/").slice(1).join("/");
+---
+
+<MarkdownLayout
+  title={title}
+  description={description}
+  eyebrow={eyebrow}
+  updatedAt={updatedAt}
+  slug={slug}
+>
+  <Content />
+</MarkdownLayout>
