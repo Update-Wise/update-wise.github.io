@@ -1,0 +1,126 @@
+---
+import { getLang, useTranslations, getDocPath } from "../i18n/utils";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+const policyHref = getDocPath(lang, "cookies");
+---
+
+<div id="cookie-banner" role="dialog" aria-live="polite" hidden>
+  <p class="cookie-text">
+    {t("cookie.text")} <a href={policyHref}>{t("cookie.policy")}</a>
+  </p>
+  <div class="cookie-actions">
+    <button type="button" id="cookie-decline">
+      {t("cookie.decline")}
+    </button>
+    <button type="button" id="cookie-accept">
+      {t("cookie.accept")}
+    </button>
+  </div>
+</div>
+
+<script>
+  const KEY = "cookie-consent";
+  const banner = document.querySelector("#cookie-banner");
+  const accept = document.querySelector("#cookie-accept");
+  const decline = document.querySelector("#cookie-decline");
+
+  try {
+    if (!localStorage.getItem(KEY) && banner instanceof HTMLElement) {
+      banner.hidden = false;
+    }
+  } catch {
+    if (banner instanceof HTMLElement) banner.hidden = false;
+  }
+
+  const choose = (value: string) => {
+    try {
+      localStorage.setItem(KEY, value);
+    } catch {
+      // Storage unavailable (private mode): just hide the banner.
+    }
+    if (banner instanceof HTMLElement) banner.hidden = true;
+  };
+
+  if (accept instanceof HTMLButtonElement) {
+    accept.addEventListener("click", () => choose("accepted"));
+  }
+  if (decline instanceof HTMLButtonElement) {
+    decline.addEventListener("click", () => choose("declined"));
+  }
+</script>
+
+<style>
+  #cookie-banner {
+    position: fixed;
+    inset-inline: 1rem;
+    bottom: 1rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 60rem;
+    margin-inline: auto;
+    padding: 1rem 1.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-outline);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgb(15 26 36 / 15%);
+  }
+
+  #cookie-banner[hidden] {
+    display: none;
+  }
+
+  .cookie-text {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .cookie-text a {
+    color: var(--color-primary);
+  }
+
+  .cookie-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .cookie-actions button {
+    min-height: 2.2rem;
+    padding: 0 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  #cookie-accept {
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-text-lighter);
+  }
+
+  #cookie-decline {
+    background: transparent;
+    border: 1px solid var(--color-surface-outline);
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 700px) {
+    #cookie-banner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .cookie-actions {
+      justify-content: stretch;
+    }
+    .cookie-actions button {
+      flex: 1;
+    }
+  }
+</style>

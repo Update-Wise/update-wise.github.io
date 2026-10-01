@@ -8,10 +8,9 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-// Legacy `updateAt` key (missing "d") used by the original .md files
+const { Content, headings } = await render(entry);
 const { title, description, eyebrow } = entry.data;
-const updatedAt = entry.data.updatedAt ?? entry.data.updateAt;
+const updatedAt = entry.data.updatedAt;
 // Slug without language prefix ("es/privacy" -> "privacy") for per-page hreflang
 const slug = entry.id.split("/").slice(1).join("/");
 ---
@@ -22,6 +21,7 @@ const slug = entry.id.split("/").slice(1).join("/");
   eyebrow={eyebrow}
   updatedAt={updatedAt}
   slug={slug}
+  headings={headings}
 >
   <Content />
 </MarkdownLayout>

@@ -2,9 +2,10 @@
 // Shared home content: Header and Footer come from Layout, so pages stay one-liners.
 import Layout from "../layouts/Layout.astro";
 import Hero from "./Hero.astro";
-import Problem from "./section1.astro";
-import HowItWorks from "./comoFunciona.astro";
-import Features from "./keycapabilities.astro";
+import Ticker from "./Ticker.astro";
+import Problem from "./Problem.astro";
+import HowItWorks from "./HowItWorks.astro";
+import Features from "./KeyCapabilities.astro";
 import Pricing from "./Pricing.astro";
 import { getLang, useTranslations } from "../i18n/utils";
 
@@ -14,9 +15,80 @@ const t = useTranslations(getLang(Astro.url));
 <Layout title={t("seo.title")} description={t("seo.description")}>
   <main>
     <Hero />
+    <Ticker />
     <Problem />
     <HowItWorks />
     <Features />
     <Pricing />
   </main>
 </Layout>
+
+<script>
+  // Progressive enhancement: animations only run when the visitor allows
+  // motion. Without JS (or with reduced motion / saver mode) everything
+  // stays visible in its final state.
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const saverOn = () => document.documentElement.dataset.saver === "on";
+
+  if (!reduceMotion && !saverOn()) {
+    document.documentElement.classList.add("js-anim");
+
+    const revealed = [...document.querySelectorAll("[data-reveal]")];
+    if ("IntersectionObserver" in window && revealed.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+      for (const el of revealed) observer.observe(el);
+    } else {
+      for (const el of revealed) el.classList.add("is-visible");
+    }
+
+    // Count-up for hero stats ("3 plataformas" -> 0..3 + " plataformas")
+    const counters = [
+      ...document.querySelectorAll<HTMLElement>("[data-count]"),
+    ];
+    const runCounter = (el: HTMLElement) => {
+      const match = (el.textContent ?? "").match(/^(\d+)(.*)$/s);
+      if (!match) return;
+      const target = Number.parseInt(match[1], 10);
+      const suffix = match[2];
+      const started = performance.now();
+      const duration = 900;
+      const tick = (now: number) => {
+        if (saverOn()) {
+          el.textContent = `${target}${suffix}`;
+          return;
+        }
+        const p = Math.min((now - started) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = `${Math.round(target * eased)}${suffix}`;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    if ("IntersectionObserver" in window && counters.length > 0) {
+      const seen = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            runCounter(entry.target as HTMLElement);
+            seen.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.4 },
+      );
+      for (const el of counters) seen.observe(el);
+    } else {
+      for (const el of counters) runCounter(el);
+    }
+  }
+</script>

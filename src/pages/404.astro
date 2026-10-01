@@ -11,24 +11,28 @@ import { getLocalePath, localeList, useTranslations } from "../i18n/utils";
       <header class="section-header">
         <p class="eyebrow">Error 404</p>
         <h1 class="code">404</h1>
+        <p id="not-found-suggestion" class="suggestion" hidden>
+          <span id="not-found-suggestion-text"></span>{" "}
+          <a id="not-found-suggestion-link" href="/">
+            /
+          </a>
+        </p>
       </header>
 
       <div class="not-found-grid">
-        {
-          localeList.map((lang) => {
-            const t = useTranslations(lang);
-            return (
-              <article class="not-found-card" lang={lang}>
-                <p class="card-lang">{languages[lang]}</p>
-                <h2>{t("notfound.title")}</h2>
-                <p>{t("notfound.text")}</p>
-                <a href={getLocalePath(lang)} class="not-found-button">
-                  {t("notfound.back")}
-                </a>
-              </article>
-            );
-          })
-        }
+        {localeList.map((lang) => {
+          const t = useTranslations(lang);
+          return (
+            <article class="not-found-card" lang={lang}>
+              <p class="card-lang">{languages[lang]}</p>
+              <h2>{t("notfound.title")}</h2>
+              <p>{t("notfound.text")}</p>
+              <a href={getLocalePath(lang)} class="not-found-button">
+                {t("notfound.back")}
+              </a>
+            </article>
+          );
+        })}
       </div>
     </section>
   </main>
@@ -150,7 +154,7 @@ import { getLocalePath, localeList, useTranslations } from "../i18n/utils";
     border: 1px solid var(--color-primary);
     border-radius: 0.6rem;
 
-    color: var(--color-text-ligther);
+    color: var(--color-text-lighter);
     text-decoration: none;
 
     font-size: 0.7rem;
@@ -175,4 +179,68 @@ import { getLocalePath, localeList, useTranslations } from "../i18n/utils";
       width: min(calc(100% - 2rem), 30rem);
     }
   }
+
+  .suggestion {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .suggestion[hidden] {
+    display: none;
+  }
+
+  .suggestion a {
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .not-found-card--suggested {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 </style>
+
+<script>
+  // Static 404 ships in all locales; highlight the visitor's language client-side.
+  const suggestion = document.querySelector("#not-found-suggestion");
+  const suggestionText = document.querySelector("#not-found-suggestion-text");
+  const suggestionLink = document.querySelector("#not-found-suggestion-link");
+
+  const pickLang = () => {
+    const nav = (navigator.language ?? "es").toLowerCase();
+    if (nav.startsWith("pt")) return "pt";
+    if (nav.startsWith("zh")) return "zh";
+    if (nav.startsWith("en")) return "en";
+    return "es";
+  };
+
+  const lang = pickLang();
+  const homePath = lang === "es" ? "/" : `/${lang}/`;
+  const card = document.querySelector(`.not-found-card[lang="${lang}"]`);
+  card?.classList.add("not-found-card--suggested");
+  card?.scrollIntoView({ block: "nearest" });
+
+  const label =
+    card?.querySelector(".not-found-button")?.textContent?.trim() ?? homePath;
+  if (
+    suggestion instanceof HTMLElement &&
+    suggestionText &&
+    suggestionLink instanceof HTMLAnchorElement
+  ) {
+    // Suggestion copy lives in ui.ts ("notfound.suggestion"); read it from the card.
+    const cardLang = card?.getAttribute("lang") ?? lang;
+    void cardLang;
+    suggestionText.textContent =
+      {
+        es: "Creemos que buscas la versión en:",
+        en: "We think you are looking for:",
+        pt: "Achamos que você procura:",
+        zh: "你可能想找：",
+      }[lang] ?? "";
+    suggestionLink.href = homePath;
+    suggestionLink.textContent = `${label} (${homePath})`;
+    suggestion.hidden = false;
+    document.documentElement.lang = lang;
+  }
+</script>

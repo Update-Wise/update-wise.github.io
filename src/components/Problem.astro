@@ -3,8 +3,9 @@ import { getLang, useTranslations } from "../i18n/utils";
 
 const t = useTranslations(getLang(Astro.url));
 ---
+
 <section id="problem">
-  <div class="section-content">
+  <div class="section-content" data-reveal>
     <p class="eyebrow">{t("problem.eyebrow")}</p>
     <h2>{t("problem.title")}</h2>
     <p id="description">

@@ -24,6 +24,9 @@ export const ui = {
     "theme.toLight": "Cambiar a tema claro",
     "theme.toDark": "Cambiar a tema oscuro",
     "theme.toggle": "Cambiar tema",
+    "saver.toggle": "Modo ahorro de datos",
+    "saver.enable": "Activar modo ahorro",
+    "saver.disable": "Desactivar modo ahorro",
     "lang.label": "Idioma",
 
     "seo.title": "Update Wise — Analiza tu PC y mejora con confianza",
@@ -32,13 +35,17 @@ export const ui = {
     "seo.ogAlt": "Vista previa de la aplicación Update Wise",
 
     "hero.eyebrow": "update wise",
-    "hero.title": "Tu mejor amigo para mejorar tu PC.",
     "hero.title1": "Tu mejor amigo para",
     "hero.title2": "mejorar tu PC.",
     "hero.subtitle":
       "Conoce tu hardware, descubre qué puedes mejorar y encuentra las opciones que mejor se adaptan a ti.",
     "hero.cta1": "Analiza mi PC",
     "hero.cta2": "Cómo funciona",
+    "hero.badge": "Código abierto · Gratis",
+    "hero.note": "Sin registro · Funciona en local",
+    "hero.stat1": "3 plataformas",
+    "hero.stat2": "4 idiomas",
+    "hero.stat3": "100% gratis para empezar",
 
     "problem.eyebrow": "actualizar no es comprar",
     "problem.title": "¿Realmente sabes qué necesita tu PC?",
@@ -124,6 +131,47 @@ export const ui = {
     "notfound.text":
       "La página que buscas no existe o fue movida. Volvamos a algo que sí funciona.",
     "notfound.back": "Volver al inicio",
+
+    "doc.updated": "Actualizado",
+    "doc.toc": "En esta página",
+
+    "cookie.text":
+      "Usamos cookies para que el sitio funcione y entender cómo se usa. Puedes aceptar o rechazar.",
+    "cookie.accept": "Aceptar",
+    "cookie.decline": "Rechazar",
+    "cookie.policy": "Ver política de cookies",
+
+    "download.eyebrow": "descarga",
+    "download.title": "Descarga Update Wise para tu equipo",
+    "download.subtitle":
+      "Detectamos tu sistema y te mostramos la descarga recomendada. Los binarios finales aún no están publicados.",
+    "download.recommended": "Recomendado para ti",
+    "download.other": "Otras plataformas",
+    "download.windows": "Windows",
+    "download.linux": "Linux",
+    "download.macos": "macOS",
+    "download.windowsDesc": "Windows 10 o posterior (64-bit) — .exe",
+    "download.linuxDesc": "Distribuciones modernas (64-bit) — .AppImage",
+    "download.macosDesc": "macOS 13 o posterior (Apple Silicon / Intel) — .dmg",
+    "download.cta": "Descargar",
+    "download.note":
+      "Enlaces provisionales: los binarios se publicarán en GitHub Releases. Comprueba el hash antes de instalar.",
+    "download.version": "v0.0.0 — próximamente",
+    "download.detected": "Detectamos tu sistema:",
+    "download.unknown":
+      "No pudimos detectar tu sistema, elige tu plataforma abajo.",
+    "download.soon": "Próximamente",
+
+    "blog.eyebrow": "blog",
+    "blog.title": "Blog de Update Wise",
+    "blog.subtitle":
+      "Guías, novedades y el camino del proyecto, contados por el equipo.",
+    "blog.read": "Leer más",
+    "blog.back": "Volver al blog",
+    "blog.published": "Publicado",
+    "blog.empty": "Aún no hay entradas. Vuelve pronto.",
+
+    "notfound.suggestion": "Creemos que buscas la versión en:",
   },
 
   en: {
@@ -134,6 +182,9 @@ export const ui = {
     "theme.toLight": "Switch to light theme",
     "theme.toDark": "Switch to dark theme",
     "theme.toggle": "Toggle theme",
+    "saver.toggle": "Data saver mode",
+    "saver.enable": "Turn on saver mode",
+    "saver.disable": "Turn off saver mode",
     "lang.label": "Language",
 
     "seo.title": "Update Wise — Analyze your PC and upgrade with confidence",
@@ -142,13 +193,17 @@ export const ui = {
     "seo.ogAlt": "Update Wise app preview",
 
     "hero.eyebrow": "update wise",
-    "hero.title": "Your best friend for upgrading your PC.",
     "hero.title1": "Your best friend for",
     "hero.title2": "upgrading your PC.",
     "hero.subtitle":
       "Get to know your hardware, discover what you can improve, and find the options that fit you best.",
     "hero.cta1": "Analyze my PC",
     "hero.cta2": "How it works",
+    "hero.badge": "Open source · Free",
+    "hero.note": "No sign-up · Works locally",
+    "hero.stat1": "3 platforms",
+    "hero.stat2": "4 languages",
+    "hero.stat3": "100% free to start",
 
     "problem.eyebrow": "upgrading isn't buying",
     "problem.title": "Do you really know what your PC needs?",
@@ -234,6 +289,46 @@ export const ui = {
     "notfound.text":
       "The page you're looking for doesn't exist or was moved. Let's get back to something that works.",
     "notfound.back": "Back to home",
+
+    "doc.updated": "Updated",
+    "doc.toc": "On this page",
+
+    "cookie.text":
+      "We use cookies to keep the site working and understand usage. You can accept or decline.",
+    "cookie.accept": "Accept",
+    "cookie.decline": "Decline",
+    "cookie.policy": "See cookie policy",
+
+    "download.eyebrow": "download",
+    "download.title": "Download Update Wise for your machine",
+    "download.subtitle":
+      "We detect your system and show the recommended download. Final binaries are not published yet.",
+    "download.recommended": "Recommended for you",
+    "download.other": "Other platforms",
+    "download.windows": "Windows",
+    "download.linux": "Linux",
+    "download.macos": "macOS",
+    "download.windowsDesc": "Windows 10 or later (64-bit) — .exe",
+    "download.linuxDesc": "Modern distros (64-bit) — .AppImage",
+    "download.macosDesc": "macOS 13 or later (Apple Silicon / Intel) — .dmg",
+    "download.cta": "Download",
+    "download.note":
+      "Placeholder links: binaries will be published on GitHub Releases. Verify the hash before installing.",
+    "download.version": "v0.0.0 — coming soon",
+    "download.detected": "We detected your system:",
+    "download.unknown":
+      "We couldn't detect your system, pick your platform below.",
+    "download.soon": "Coming soon",
+
+    "blog.eyebrow": "blog",
+    "blog.title": "Update Wise blog",
+    "blog.subtitle": "Guides, news and the road ahead, told by the team.",
+    "blog.read": "Read more",
+    "blog.back": "Back to the blog",
+    "blog.published": "Published",
+    "blog.empty": "No posts yet. Check back soon.",
+
+    "notfound.suggestion": "We think you are looking for:",
   },
 
   pt: {
@@ -244,6 +339,9 @@ export const ui = {
     "theme.toLight": "Mudar para o tema claro",
     "theme.toDark": "Mudar para o tema escuro",
     "theme.toggle": "Alternar tema",
+    "saver.toggle": "Modo de economia de dados",
+    "saver.enable": "Ativar modo econômico",
+    "saver.disable": "Desativar modo econômico",
     "lang.label": "Idioma",
 
     "seo.title": "Update Wise — Analise seu PC e melhore com confiança",
@@ -252,13 +350,17 @@ export const ui = {
     "seo.ogAlt": "Prévia do aplicativo Update Wise",
 
     "hero.eyebrow": "update wise",
-    "hero.title": "Seu melhor amigo para melhorar seu PC.",
     "hero.title1": "Seu melhor amigo para",
     "hero.title2": "melhorar seu PC.",
     "hero.subtitle":
       "Conheça seu hardware, descubra o que você pode melhorar e encontre as opções que mais combinam com você.",
     "hero.cta1": "Analisar meu PC",
     "hero.cta2": "Como funciona",
+    "hero.badge": "Código aberto · Grátis",
+    "hero.note": "Sem cadastro · Funciona localmente",
+    "hero.stat1": "3 plataformas",
+    "hero.stat2": "4 idiomas",
+    "hero.stat3": "100% grátis para começar",
 
     "problem.eyebrow": "atualizar não é comprar",
     "problem.title": "Você realmente sabe do que o seu PC precisa?",
@@ -344,6 +446,48 @@ export const ui = {
     "notfound.text":
       "A página que você procura não existe ou foi movida. Vamos voltar a algo que funcione.",
     "notfound.back": "Voltar ao início",
+
+    "doc.updated": "Atualizado",
+    "doc.toc": "Nesta página",
+
+    "cookie.text":
+      "Usamos cookies para manter o site funcionando e entender o uso. Você pode aceitar ou recusar.",
+    "cookie.accept": "Aceitar",
+    "cookie.decline": "Recusar",
+    "cookie.policy": "Ver política de cookies",
+
+    "download.eyebrow": "download",
+    "download.title": "Baixe o Update Wise para o seu computador",
+    "download.subtitle":
+      "Detectamos seu sistema e mostramos o download recomendado. Os binários finais ainda não foram publicados.",
+    "download.recommended": "Recomendado para você",
+    "download.other": "Outras plataformas",
+    "download.windows": "Windows",
+    "download.linux": "Linux",
+    "download.macos": "macOS",
+    "download.windowsDesc": "Windows 10 ou posterior (64-bit) — .exe",
+    "download.linuxDesc": "Distribuições modernas (64-bit) — .AppImage",
+    "download.macosDesc":
+      "macOS 13 ou posterior (Apple Silicon / Intel) — .dmg",
+    "download.cta": "Baixar",
+    "download.note":
+      "Links provisórios: os binários serão publicados no GitHub Releases. Verifique o hash antes de instalar.",
+    "download.version": "v0.0.0 — em breve",
+    "download.detected": "Detectamos seu sistema:",
+    "download.unknown":
+      "Não conseguimos detectar seu sistema, escolha sua plataforma abaixo.",
+    "download.soon": "Em breve",
+
+    "blog.eyebrow": "blog",
+    "blog.title": "Blog do Update Wise",
+    "blog.subtitle":
+      "Guias, novidades e os próximos passos do projeto, contados pela equipe.",
+    "blog.read": "Ler mais",
+    "blog.back": "Voltar ao blog",
+    "blog.published": "Publicado",
+    "blog.empty": "Ainda não há posts. Volte em breve.",
+
+    "notfound.suggestion": "Achamos que você procura:",
   },
 
   zh: {
@@ -354,6 +498,9 @@ export const ui = {
     "theme.toLight": "切换到浅色主题",
     "theme.toDark": "切换到深色主题",
     "theme.toggle": "切换主题",
+    "saver.toggle": "省流模式",
+    "saver.enable": "开启省流模式",
+    "saver.disable": "关闭省流模式",
     "lang.label": "语言",
 
     "seo.title": "Update Wise — 分析你的电脑，自信升级",
@@ -362,13 +509,17 @@ export const ui = {
     "seo.ogAlt": "Update Wise 应用程序预览",
 
     "hero.eyebrow": "update wise",
-    "hero.title": "升级电脑的最佳伙伴。",
     "hero.title1": "升级电脑的",
     "hero.title2": "最佳伙伴。",
     "hero.subtitle":
       "了解你的硬件，发现可以改进的地方，找到最适合你的升级方案。",
     "hero.cta1": "分析我的电脑",
     "hero.cta2": "工作原理",
+    "hero.badge": "开源 · 免费",
+    "hero.note": "无需注册 · 本地运行",
+    "hero.stat1": "3 个平台",
+    "hero.stat2": "4 种语言",
+    "hero.stat3": "免费开始",
 
     "problem.eyebrow": "升级不等于购买",
     "problem.title": "你真的知道你的电脑需要什么吗？",
@@ -394,7 +545,8 @@ export const ui = {
     "features.recs.desc":
       "根据你的使用方式、预算和实际所需性能，推荐兼容的升级方案。",
     "features.easy.title": "轻松升级",
-    "features.easy.desc": "优先推荐最重要的改进，并一步步指导你，让你做出清晰的决定。",
+    "features.easy.desc":
+      "优先推荐最重要的改进，并一步步指导你，让你做出清晰的决定。",
 
     "pricing.eyebrow": "免费试用",
     "pricing.title": "选择你的开始方式",
@@ -445,8 +597,48 @@ export const ui = {
 
     "notfound.eyebrow": "404 错误",
     "notfound.title": "这个配件好像不存在",
-    "notfound.text": "你要找的页面不存在或已被移动。让我们回到可以正常工作的页面吧。",
+    "notfound.text":
+      "你要找的页面不存在或已被移动。让我们回到可以正常工作的页面吧。",
     "notfound.back": "返回首页",
+
+    "doc.updated": "更新于",
+    "doc.toc": "本页目录",
+
+    "cookie.text":
+      "我们使用 Cookie 来保证网站正常运行并了解使用情况。你可以选择接受或拒绝。",
+    "cookie.accept": "接受",
+    "cookie.decline": "拒绝",
+    "cookie.policy": "查看 Cookie 政策",
+
+    "download.eyebrow": "下载",
+    "download.title": "为你的电脑下载 Update Wise",
+    "download.subtitle":
+      "我们会检测你的系统并显示推荐的下载。最终安装包尚未发布。",
+    "download.recommended": "为你推荐",
+    "download.other": "其他平台",
+    "download.windows": "Windows",
+    "download.linux": "Linux",
+    "download.macos": "macOS",
+    "download.windowsDesc": "Windows 10 或更高版本（64 位）— .exe",
+    "download.linuxDesc": "主流发行版（64 位）— .AppImage",
+    "download.macosDesc": "macOS 13 或更高版本（Apple Silicon / Intel）— .dmg",
+    "download.cta": "下载",
+    "download.note":
+      "占位链接：安装包将在 GitHub Releases 发布。安装前请校验哈希。",
+    "download.version": "v0.0.0 — 即将推出",
+    "download.detected": "检测到你的系统：",
+    "download.unknown": "未能检测到你的系统，请在下方选择你的平台。",
+    "download.soon": "即将推出",
+
+    "blog.eyebrow": "博客",
+    "blog.title": "Update Wise 博客",
+    "blog.subtitle": "指南、动态与项目进展，由团队为你带来。",
+    "blog.read": "阅读更多",
+    "blog.back": "返回博客",
+    "blog.published": "发布于",
+    "blog.empty": "还没有文章，敬请期待。",
+
+    "notfound.suggestion": "你可能想找：",
   },
 } as const;
 

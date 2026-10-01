@@ -1,21 +1,29 @@
 ---
 import Github from "../assets/github.svg";
 import Discord from "../assets/discordico.svg";
-import { getLang, useTranslations, getLocalePath, getDocPath } from "../i18n/utils";
+import {
+  getLang,
+  useTranslations,
+  getLocalePath,
+  getDocPath,
+  getDownloadPath,
+  getBlogPath,
+} from "../i18n/utils";
 
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
+const homePath = getLocalePath(lang);
 ---
 
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-brand">
       <div>
-        <a href={getLocalePath(lang)} class="footer-title">update wise</a>
+        <a href={getLocalePath(lang)} class="footer-title">
+          update wise
+        </a>
 
-        <p class="footer-description">
-          {t("footer.tagline")}
-        </p>
+        <p class="footer-description">{t("footer.tagline")}</p>
 
         <div class="footer-socials">
           <a
@@ -46,28 +54,30 @@ const t = useTranslations(lang);
       <div class="footer-column">
         <h3>{t("footer.product")}</h3>
 
-        <a href="#how-it-works">{t("footer.product.how")}</a>
-        <a href="#features">{t("footer.product.features")}</a>
-        <a href="#pricing">{t("footer.product.pricing")}</a>
-        <a href="#download">{t("footer.product.download")}</a>
+        <a href={`${homePath}#how-it-works`}>{t("footer.product.how")}</a>
+        <a href={`${homePath}#key-capabilities`}>
+          {t("footer.product.features")}
+        </a>
+        <a href={`${homePath}#pricing`}>{t("footer.product.pricing")}</a>
+        <a href={getDownloadPath(lang)}>{t("footer.product.download")}</a>
       </div>
 
       <div class="footer-column">
         <h3>{t("footer.company")}</h3>
 
-        <a href="#about">{t("footer.company.about")}</a>
-        <a href="#contact">{t("footer.company.contact")}</a>
-        <a href="#blog">{t("footer.company.blog")}</a>
+        <a href={getDocPath(lang, "about")}>{t("footer.company.about")}</a>
+        <a href={getDocPath(lang, "support")}>{t("footer.company.contact")}</a>
+        <a href={getBlogPath(lang)}>{t("footer.company.blog")}</a>
         <a href={getDocPath(lang, "privacy")}>{t("footer.company.privacy")}</a>
       </div>
 
       <div class="footer-column">
         <h3>{t("footer.support")}</h3>
 
-        <a href="#help">{t("footer.support.help")}</a>
-        <a href="#faq">{t("footer.support.faq")}</a>
-        <a href="#status">{t("footer.support.status")}</a>
-        <a href="#contact">{t("footer.support.contact")}</a>
+        <a href={getDocPath(lang, "support")}>{t("footer.support.help")}</a>
+        <a href={getDocPath(lang, "faq")}>{t("footer.support.faq")}</a>
+        <a href={getDocPath(lang, "status")}>{t("footer.support.status")}</a>
+        <a href={getDocPath(lang, "support")}>{t("footer.support.contact")}</a>
       </div>
     </nav>
   </div>
@@ -108,8 +118,7 @@ const t = useTranslations(lang);
   .footer-brand {
     display: flex;
     flex-direction: row;
-
-    align-items;
+    align-items: flex-start;
   }
 
   .footer-title {
@@ -300,6 +309,6 @@ const t = useTranslations(lang);
   }
 
   .Github {
-     fill: var(--color-text-primary);
+    fill: var(--color-text-primary);
   }
 </style>

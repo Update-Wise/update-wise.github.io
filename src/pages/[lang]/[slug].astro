@@ -7,7 +7,9 @@ import { defaultLang } from "../../i18n/ui";
 
 export async function getStaticPaths() {
   const entries = await getCollection("pages");
-  const slugs = [...new Set(entries.map((e) => e.id.split("/").slice(1).join("/")))];
+  const slugs = [
+    ...new Set(entries.map((e) => e.id.split("/").slice(1).join("/"))),
+  ];
 
   return slugs.flatMap((slug) =>
     localeList
@@ -24,6 +26,10 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+if (!entry)
+  throw new Error(
+    `Missing entry for ${Astro.params.lang}/${Astro.params.slug}`,
+  );
 ---
 
 <DocPage entry={entry} />

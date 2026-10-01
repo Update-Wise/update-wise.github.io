@@ -1,0 +1,144 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { getLang, useTranslations, getBlogPostPath } from "../i18n/utils";
+import { defaultLang } from "../i18n/ui";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const all = await getCollection("blog");
+const localized = all.filter((e) => e.id.startsWith(`${lang}/`));
+const posts = (
+  localized.length > 0
+    ? localized
+    : all.filter((e) => e.id.startsWith(`${defaultLang}/`))
+).sort((a, b) => b.data.pubDate.localeCompare(a.data.pubDate));
+
+// Entry id "es/blog/2026/welcome" -> post path "2026/welcome"
+const postPath = (id: string) => id.split("/").slice(2).join("/");
+---
+
+<Layout title={t("blog.title")} description={t("blog.subtitle")} slug="blog">
+  <main class="blog-page">
+    <header class="section-header">
+      <p class="eyebrow">{t("blog.eyebrow")}</p>
+      <h1>{t("blog.title")}</h1>
+      <p class="subtitle">{t("blog.subtitle")}</p>
+    </header>
+
+    {posts.length === 0 ? (
+      <p class="empty">{t("blog.empty")}</p>
+    ) : (
+      <div class="post-grid">
+        {posts.map((post) => (
+          <article class="post-card">
+            <p class="post-date">
+              {t("blog.published")}: {post.data.pubDate}
+            </p>
+            <h2>
+              <a href={getBlogPostPath(lang, postPath(post.id))}>
+                {post.data.title}
+              </a>
+            </h2>
+            {post.data.description && (
+              <p class="muted">{post.data.description}</p>
+            )}
+            <a
+              class="read-more"
+              href={getBlogPostPath(lang, postPath(post.id))}
+            >
+              {t("blog.read")} →
+            </a>
+          </article>
+        ))}
+      </div>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .blog-page {
+    width: min(calc(100% - 2rem), 60rem);
+    margin-inline: auto;
+    padding: 7rem 0 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .section-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .section-header h1 {
+    margin: 0;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 500;
+  }
+  .subtitle {
+    max-width: 40rem;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .empty {
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-secondary);
+    border-radius: 1.25rem;
+  }
+  .post-card h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .post-card h2 a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .post-card h2 a:hover {
+    color: var(--color-primary);
+  }
+  .post-date {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .muted {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  .read-more {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  @media (max-width: 700px) {
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

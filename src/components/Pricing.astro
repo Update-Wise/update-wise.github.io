@@ -1,64 +1,70 @@
 ---
-import { getLang, useTranslations } from "../i18n/utils";
+import {
+  getLang,
+  useTranslations,
+  getDocPath,
+  getDownloadPath,
+} from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
 
-const t = useTranslations(getLang(Astro.url));
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
 
 const plans = [
-  { id: "free", price: 0, href: "#download", featured: false },
-  { id: "pro", price: 9, href: "#download", featured: true },
-  { id: "team", price: 29, href: "#contact", featured: false },
+  { id: "free", price: 0, href: getDownloadPath(lang), featured: false },
+  { id: "pro", price: 9, href: getDownloadPath(lang), featured: true },
+  { id: "team", price: 29, href: getDocPath(lang, "support"), featured: false },
 ] as const;
 
 const k = (id: string, suffix: string) => `plan.${id}.${suffix}` as UIKey;
 ---
 
 <section id="pricing">
-  <header class="section-header">
+  <header class="section-header" data-reveal>
     <p class="eyebrow">{t("pricing.eyebrow")}</p>
 
     <h2>{t("pricing.title")}</h2>
   </header>
 
   <div class="pricing-grid">
-    {
-      plans.map((plan) => (
-        <article
-          class:list={[
-            "pricing-card",
-            { "pricing-card--featured": plan.featured },
-          ]}
-        >
-          <div class="pricing-card-header">
-            {plan.featured ? (
-              <div class="pricing-title">
-                <h3>{t(k(plan.id, "name"))}</h3>
-                <span class="popular">{t("pricing.popular")}</span>
-              </div>
-            ) : (
+    {plans.map((plan, index) => (
+      <article
+        data-reveal
+        style={`--reveal-delay: ${index * 110}ms`}
+        class:list={[
+          "pricing-card",
+          { "pricing-card--featured": plan.featured },
+        ]}
+      >
+        <div class="pricing-card-header">
+          {plan.featured ? (
+            <div class="pricing-title">
               <h3>{t(k(plan.id, "name"))}</h3>
-            )}
+              <span class="popular">{t("pricing.popular")}</span>
+            </div>
+          ) : (
+            <h3>{t(k(plan.id, "name"))}</h3>
+          )}
 
-            <p>{t(k(plan.id, "desc"))}</p>
-          </div>
+          <p>{t(k(plan.id, "desc"))}</p>
+        </div>
 
-          <div class="price">
-            <strong>${plan.price}</strong>
-            <span>{t("pricing.perMonth")}</span>
-          </div>
+        <div class="price">
+          <strong>${plan.price}</strong>
+          <span>{t("pricing.perMonth")}</span>
+        </div>
 
-          <ul class="features">
-            <li>{t(k(plan.id, "f1"))}</li>
-            <li>{t(k(plan.id, "f2"))}</li>
-            <li>{t(k(plan.id, "f3"))}</li>
-          </ul>
+        <ul class="features">
+          <li>{t(k(plan.id, "f1"))}</li>
+          <li>{t(k(plan.id, "f2"))}</li>
+          <li>{t(k(plan.id, "f3"))}</li>
+        </ul>
 
-          <a href={plan.href} class="pricing-button">
-            {t(k(plan.id, "cta"))}
-          </a>
-        </article>
-      ))
-    }
+        <a href={plan.href} class="pricing-button">
+          {t(k(plan.id, "cta"))}
+        </a>
+      </article>
+    ))}
   </div>
 </section>
 
@@ -122,16 +128,39 @@ const k = (id: string, suffix: string) => `plan.${id}.${suffix}` as UIKey;
 
     padding: 1rem;
 
-    background-color: var(--color-surface);
+    background: var(--gradient-surface);
 
     border: 1px solid var(--color-surface-secondary);
     border-radius: 1.5rem;
 
     box-shadow: 0 2px 8px rgb(15 26 36 / 4%);
+
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -10px var(--color-glow-strong);
   }
 
   .pricing-card--featured {
     border: 1.5px solid var(--color-primary);
+  }
+
+  html.js-anim .pricing-card--featured {
+    animation: featured-glow 3.2s ease-in-out infinite;
+  }
+
+  @keyframes featured-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+    50% {
+      box-shadow: 0 0 28px -4px var(--color-glow-strong);
+    }
   }
 
   .pricing-card-header h3 {
@@ -156,7 +185,7 @@ const k = (id: string, suffix: string) => `plan.${id}.${suffix}` as UIKey;
     background-color: var(--color-primary);
     border-radius: 999px;
 
-    color: var(--color-text-ligther);
+    color: var(--color-text-lighter);
 
     font-size: 0.6rem;
     font-weight: 500;
@@ -256,7 +285,7 @@ const k = (id: string, suffix: string) => `plan.${id}.${suffix}` as UIKey;
     background-color: var(--color-primary);
     border-color: var(--color-primary);
 
-    color: var(--color-text-ligther);
+    color: var(--color-text-lighter);
   }
 
   .pricing-button:hover {

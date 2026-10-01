@@ -1,0 +1,336 @@
+<!--
+  Interactive mascot placeholder.
+  Motion (tilt, parallax, squash) lives on the wrapper, so when the final
+  artwork arrives only the .mascot-sprite box needs swapping for the PNG.
+-->
+<!-- TODO(brand): replace .mascot-sprite with the mascot PNG <img>. -->
+
+<div class="mascot" aria-hidden="true" data-mascot>
+  <div class="mascot-tilt" data-mascot-tilt>
+    <div class="mascot-sprite" data-mascot-sprite>
+      <span class="mascot-eye left" data-mascot-eye>
+        <span class="pupil" data-mascot-pupil></span>
+      </span>
+      <span class="mascot-eye right" data-mascot-eye>
+        <span class="pupil" data-mascot-pupil></span>
+      </span>
+      <span class="mascot-smile" data-mascot-smile></span>
+      <span class="cheek left" data-mascot-cheek></span>
+      <span class="cheek right" data-mascot-cheek></span>
+    </div>
+  </div>
+  <div class="mascot-shadow" data-mascot-shadow></div>
+</div>
+
+<script>
+  // Delight without cost: every reaction below is skipped for reduced
+  // motion, saver mode, touch-only coarse pointers handled via pointer
+  // events, and the sprite stays put when JS is off.
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const mascot = document.querySelector("[data-mascot]");
+  const tilt = document.querySelector("[data-mascot-tilt]");
+  const pupils = [
+    ...document.querySelectorAll<HTMLElement>("[data-mascot-pupil]"),
+  ];
+  const eyes = [...document.querySelectorAll<HTMLElement>("[data-mascot-eye]")];
+  const smile = document.querySelector("[data-mascot-smile]");
+  const cheeks = [
+    ...document.querySelectorAll<HTMLElement>("[data-mascot-cheek]"),
+  ];
+  const shadow = document.querySelector("[data-mascot-shadow]");
+
+  if (
+    !reduceMotion &&
+    mascot instanceof HTMLElement &&
+    tilt instanceof HTMLElement
+  ) {
+    const state = {
+      px: 0,
+      py: 0,
+      rx: 0,
+      ry: 0,
+      tpx: 0,
+      tpy: 0,
+      trx: 0,
+      try_: 0,
+      squash: 0,
+      happy: 0,
+      thappy: 0,
+      blink: 0,
+      hopStart: -1,
+      lastMove: 0,
+      pupilX: 0,
+      pupilY: 0,
+    };
+    const PUPIL_RANGE = 4;
+    const TILT_RANGE = 9;
+    const PARALLAX_RANGE = 10;
+
+    const saverOn = () => document.documentElement.dataset.saver === "on";
+
+    const scheduleBlink = () => {
+      window.setTimeout(
+        () => {
+          state.blink = 1;
+          scheduleBlink();
+        },
+        2600 + Math.random() * 3200,
+      );
+    };
+    scheduleBlink();
+
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        if (saverOn()) return;
+        state.lastMove = performance.now();
+        // Gaze: pupils track the cursor from the sprite center.
+        const box = mascot.getBoundingClientRect();
+        const cx = box.left + box.width / 2;
+        const cy = box.top + box.height / 2;
+        const dx = event.clientX - cx;
+        const dy = event.clientY - cy;
+        const dist = Math.hypot(dx, dy) || 1;
+        state.pupilX = (dx / dist) * Math.min(PUPIL_RANGE, dist / 40);
+        state.pupilY = (dy / dist) * Math.min(PUPIL_RANGE, dist / 40);
+        // Tilt + parallax from the viewport position (scene-wide reaction).
+        const nx = (event.clientX / window.innerWidth - 0.5) * 2;
+        const ny = (event.clientY / window.innerHeight - 0.5) * 2;
+        state.try_ = nx * TILT_RANGE;
+        state.trx = -ny * (TILT_RANGE * 0.7);
+        state.tpx = -nx * PARALLAX_RANGE;
+        state.tpy = -ny * (PARALLAX_RANGE * 0.6);
+      },
+      { passive: true },
+    );
+
+    document.addEventListener("pointerleave", () => {
+      state.pupilX = 0;
+      state.pupilY = 0;
+      state.tpx = 0;
+      state.tpy = 0;
+      state.trx = 0;
+      state.try_ = 0;
+    });
+
+    mascot.addEventListener("pointerenter", () => {
+      state.thappy = 1;
+    });
+    mascot.addEventListener("pointerleave", () => {
+      state.thappy = 0;
+    });
+    mascot.addEventListener("pointerdown", () => {
+      if (saverOn()) return;
+      state.squash = 1;
+      state.blink = 1;
+      state.hopStart = performance.now();
+    });
+
+    const lerp = (from: number, to: number, rate: number) =>
+      from + (to - from) * rate;
+
+    const frame = (now: number) => {
+      if (saverOn()) {
+        tilt.style.transform = "";
+        for (const pupil of pupils) pupil.style.transform = "";
+        requestAnimationFrame(frame);
+        return;
+      }
+      // Ease every channel toward its target for a soft, weighty feel.
+      state.px = lerp(state.px, state.tpx, 0.08);
+      state.py = lerp(state.py, state.tpy, 0.08);
+      state.rx = lerp(state.rx, state.trx, 0.08);
+      state.ry = lerp(state.ry, state.try_, 0.08);
+      state.happy = lerp(state.happy, state.thappy, 0.12);
+      state.squash *= 0.88;
+
+      // Hop: a 420ms sine jump on press.
+      let hop = 0;
+      if (state.hopStart >= 0) {
+        const t = (now - state.hopStart) / 420;
+        if (t >= 1) state.hopStart = -1;
+        else hop = -Math.sin(t * Math.PI) * 16;
+      }
+      // Idle bob after 3s without mouse movement.
+      const idle = now - state.lastMove > 3000 ? Math.sin(now / 620) * 4 : 0;
+
+      const sx = 1 + state.squash * 0.16;
+      const sy = 1 - state.squash * 0.2;
+      tilt.style.transform =
+        `translate3d(${state.px.toFixed(2)}px, ${(state.py + idle + hop).toFixed(2)}px, 0) ` +
+        `rotateX(${state.rx.toFixed(2)}deg) rotateY(${state.ry.toFixed(2)}deg) ` +
+        `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+
+      for (const pupil of pupils) {
+        pupil.style.transform = `translate(${state.pupilX.toFixed(2)}px, ${state.pupilY.toFixed(2)}px)`;
+      }
+
+      // Blink: quick scaleY dip, eased out.
+      if (state.blink > 0) state.blink = Math.max(0, state.blink - 0.12);
+      const lid = 1 - Math.sin(state.blink * Math.PI) * 0.9;
+      for (const eye of eyes) {
+        eye.style.transform = `scaleY(${lid.toFixed(3)})`;
+      }
+      if (smile instanceof HTMLElement) {
+        smile.style.transform = `scale(${(1 + state.happy * 0.25).toFixed(3)})`;
+      }
+      for (const cheek of cheeks) {
+        cheek.style.opacity = state.happy.toFixed(3);
+      }
+      if (shadow instanceof HTMLElement) {
+        const lift = Math.abs(idle + hop);
+        shadow.style.transform = `scaleX(${(1 - lift / 160).toFixed(3)})`;
+        shadow.style.opacity = (0.5 - lift / 200).toFixed(3);
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+</script>
+
+<style>
+  .mascot {
+    position: absolute;
+    z-index: 2;
+    left: -2.75rem;
+    bottom: -1.25rem;
+    width: 7rem;
+    perspective: 600px;
+  }
+
+  .mascot-tilt {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .mascot-sprite {
+    position: relative;
+    width: 7rem;
+    height: 7rem;
+    background: var(--gradient-surface);
+    border: 1px solid var(--color-surface-outline);
+    border-radius: 1.75rem;
+    box-shadow:
+      0 18px 40px -12px var(--color-glow-strong),
+      inset 0 2px 0 rgb(255 255 255 / 25%);
+  }
+
+  html.js-anim .mascot-sprite {
+    animation: bob 4.5s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -5px;
+    }
+  }
+
+  .mascot-eye {
+    position: absolute;
+    top: 2rem;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--color-text-primary);
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .mascot-eye.left {
+    left: 1.5rem;
+  }
+
+  .mascot-eye.right {
+    right: 1.5rem;
+  }
+
+  .pupil {
+    width: 0.55rem;
+    height: 0.55rem;
+    background: var(--color-text-lighter);
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .mascot-smile {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    width: 2rem;
+    height: 1rem;
+    translate: -50% 0;
+    border-bottom: 3px solid var(--color-text-primary);
+    border-radius: 0 0 2rem 2rem;
+    will-change: transform;
+  }
+
+  .cheek {
+    position: absolute;
+    bottom: 1.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--color-glow-strong);
+    opacity: 0;
+  }
+
+  .cheek.left {
+    left: 0.9rem;
+  }
+
+  .cheek.right {
+    right: 0.9rem;
+  }
+
+  .mascot-shadow {
+    height: 0.8rem;
+    margin: 0.45rem 1rem 0;
+    background: radial-gradient(closest-side, rgb(0 0 0 / 35%), transparent);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 900px) {
+    .mascot {
+      left: -0.5rem;
+      bottom: -1rem;
+      width: 5.5rem;
+    }
+
+    .mascot-sprite {
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: 1.4rem;
+    }
+
+    .mascot-eye {
+      top: 1.5rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    .mascot-eye.left {
+      left: 1.1rem;
+    }
+
+    .mascot-eye.right {
+      right: 1.1rem;
+    }
+
+    .mascot-smile {
+      bottom: 1.1rem;
+      width: 1.6rem;
+    }
+
+    .cheek {
+      bottom: 1.4rem;
+    }
+  }
+</style>

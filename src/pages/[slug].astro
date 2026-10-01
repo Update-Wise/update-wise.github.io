@@ -7,7 +7,10 @@ export async function getStaticPaths() {
   const entries = await getCollection("pages");
   return entries
     .filter((e) => e.id.startsWith("es/"))
-    .map((entry) => ({ params: { slug: entry.id.slice(3) }, props: { entry } }));
+    .map((entry) => ({
+      params: { slug: entry.id.slice(3) },
+      props: { entry },
+    }));
 }
 
 const { entry } = Astro.props;

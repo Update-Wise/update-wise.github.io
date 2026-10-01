@@ -14,27 +14,26 @@ const k = (id: string, suffix: string) => `how.${id}.${suffix}` as UIKey;
 ---
 
 <section id="how-it-works">
-  <header class="section-header">
+  <header class="section-header" data-reveal>
     <p class="eyebrow">{t("how.eyebrow")}</p>
 
     <h2>
-      {t("how.title1")}<br />
+      {t("how.title1")}
+      <br />
       {t("how.title2")}
     </h2>
   </header>
 
   <ol class="steps">
-    {
-      steps.map((step, index) => (
-        <li class="step">
-          <span class={`step-number ${step.modifier}`}>{index + 1}</span>
-          <div class="step-content">
-            <h3>{t(k(step.id, "title"))}</h3>
-            <p class="description">{t(k(step.id, "desc"))}</p>
-          </div>
-        </li>
-      ))
-    }
+    {steps.map((step, index) => (
+      <li class="step" data-reveal style={`--reveal-delay: ${index * 110}ms`}>
+        <span class={`step-number ${step.modifier}`}>{index + 1}</span>
+        <div class="step-content">
+          <h3>{t(k(step.id, "title"))}</h3>
+          <p class="description">{t(k(step.id, "desc"))}</p>
+        </div>
+      </li>
+    ))}
   </ol>
 </section>
 
@@ -69,6 +68,16 @@ const k = (id: string, suffix: string) => `how.${id}.${suffix}` as UIKey;
 
     border-radius: 2rem;
     outline: 1px solid var(--color-surface-outline);
+    background: var(--gradient-surface);
+
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -10px var(--color-glow-strong);
   }
 
   .step-content {
@@ -93,7 +102,7 @@ const k = (id: string, suffix: string) => `how.${id}.${suffix}` as UIKey;
 
     border-radius: 50%;
 
-    color: var(--color-text-ligther);
+    color: var(--color-text-lighter);
     font-size: 0.875rem;
     font-weight: 500;
   }
@@ -107,7 +116,7 @@ const k = (id: string, suffix: string) => `how.${id}.${suffix}` as UIKey;
   }
 
   .step-number--improve {
-    background-color: var(--color-sucess);
+    background-color: var(--color-success);
   }
 
   h3 {

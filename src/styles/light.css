@@ -1,0 +1,38 @@
+@import "./tokens.css";
+
+:root {
+  --color-background: var(--neutral-50);
+  --color-surface: var(--neutral-0);
+  --color-surface-secondary: var(--neutral-100);
+  --color-surface-darkened: var(--neutral-900);
+  --color-surface-outline: var(--neutral-900);
+
+  --color-text-primary: #000000;
+  --color-text-secondary: var(--neutral-800);
+  --color-text-highlight: var(--blue-700);
+  --color-text-lighter: var(--neutral-0);
+  --color-text-lighter-highlight: var(--neutral-100);
+
+  --color-primary: var(--green-700);
+  --color-primary-darkened: var(--green-800);
+
+  --color-success: var(--green-700);
+  --color-warning: var(--amber-700);
+  --color-error: var(--red-700);
+
+  /* Expressive materials, all derived from the palette above */
+  --color-glow: rgb(17 197 79 / 20%);
+  --color-glow-strong: rgb(17 197 79 / 38%);
+  --color-glass: rgb(255 255 255 / 62%);
+  --gradient-brand: linear-gradient(120deg, var(--green-700), var(--cyan-700));
+  --gradient-surface: linear-gradient(
+    180deg,
+    var(--neutral-0),
+    var(--neutral-100)
+  );
+  --gradient-hero-wash: radial-gradient(
+    42rem 30rem at 12% 18%,
+    rgb(147 229 175 / 45%),
+    transparent 65%
+  );
+}

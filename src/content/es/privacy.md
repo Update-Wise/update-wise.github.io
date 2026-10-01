@@ -2,7 +2,7 @@
 title: Política de Privacidad
 description: Conoce cómo Update Wise recopila, utiliza, protege y gestiona la información relacionada con el uso de nuestros servicios.
 eyebrow: Privacidad
-updateAt: 2026-10-01
+updatedAt: 2026-10-01
 ---
 
 ---

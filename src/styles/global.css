@@ -1,30 +1,34 @@
-@import "ligth.css";
+@import "light.css";
 @import "dark.css";
 @import "tokens.css";
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/inter-full-full-normal.woff2") format("woff2");
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Inter";
+  src: url("/fonts/inter-full-full-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("/fonts/inter-full-full-italic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Inter";
+  src: url("/fonts/inter-full-full-italic.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
 }
 
 :root {
-    font-family: "Inter", Arial, Helvetica, sans-serif;
-    font-weight: 300;
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 300;
 }
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: var(--color-glow-strong);
 }
 
 html {
@@ -32,7 +36,80 @@ html {
 }
 
 body {
-  margin     : 0;
-  background : var(--color-background);
-  color      : var(--color-text-primary);
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.description {
+  font-weight: 200;
+  font-size: 0.75rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+
+  color: var(--color-primary);
+
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Scroll reveal: elements hide only when JS animations are enabled,
+   so no-JS visitors always see the final state. */
+html.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity var(--dur-med) var(--ease-out),
+    transform var(--dur-med) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.js-anim [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Compatibility: visitors who prefer reduced motion get a static page. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html.js-anim [data-reveal],
+  html.js-anim .hero [data-enter] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Saver mode for slow connections: no motion, no blur, no decor. */
+html[data-saver="on"] *,
+html[data-saver="on"] *::before,
+html[data-saver="on"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html[data-saver="on"] [data-reveal],
+html[data-saver="on"] .hero [data-enter] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html[data-saver="on"] .orb,
+html[data-saver="on"] .hero::before {
+  display: none !important;
+}
+
+html[data-saver="on"] * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }

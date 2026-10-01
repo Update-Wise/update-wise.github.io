@@ -1,4 +1,4 @@
-# TODO: actualizar el dominio cuando el proyecto tenga uno final.
+# TODO: update the domain once the project has a final one.
 User-agent: *
 Allow: /
 

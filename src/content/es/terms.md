@@ -2,7 +2,7 @@
 title: Términos de Servicio
 description: Consulta las condiciones que regulan el acceso y uso de los servicios de Update Wise.
 eyebrow: Términos
-updateAt: 2026-10-01
+updatedAt: 2026-10-01
 ---
 
 ---

@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import BlogPost from "../../components/BlogPost.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("blog");
+  return entries
+    .filter((e) => e.id.startsWith("es/"))
+    .map((entry) => ({
+      params: { post: entry.id.split("/").slice(2).join("/") },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+if (!entry) throw new Error(`Missing blog entry for ${Astro.params.post}`);
+---
+
+<BlogPost entry={entry} />

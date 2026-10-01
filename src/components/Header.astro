@@ -1,10 +1,17 @@
 ---
 import Github from "../assets/github.svg";
-import LanguageSelector from "./Languageselector.astro";
-import { getLang, useTranslations, getLocalePath } from "../i18n/utils";
+import LanguageSelector from "./LanguageSelector.astro";
+import {
+  getLang,
+  useTranslations,
+  getLocalePath,
+  getDocPath,
+  getDownloadPath,
+} from "../i18n/utils";
 
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
+const homePath = getLocalePath(lang);
 ---
 
 <header class="header">
@@ -21,10 +28,10 @@ const t = useTranslations(lang);
   </div>
 
   <nav>
-    <a href="#about">{t("nav.about")}</a>
-    <a href="#contact">{t("nav.contact")}</a>
-    <a href="#download">{t("nav.download")}</a>
-    <a href="#pricing">{t("nav.pricing")}</a>
+    <a href={getDocPath(lang, "about")}>{t("nav.about")}</a>
+    <a href={getDocPath(lang, "support")}>{t("nav.contact")}</a>
+    <a href={getDownloadPath(lang)}>{t("nav.download")}</a>
+    <a href={`${homePath}#pricing`}>{t("nav.pricing")}</a>
     <a
       href="https://github.com/Update-Wise/Update-Wise-Main"
       target="_blank"
@@ -45,6 +52,17 @@ const t = useTranslations(lang);
       data-label-to-dark={t("theme.toDark")}
     >
       ☾
+    </button>
+
+    <button
+      id="saver-toggle"
+      type="button"
+      aria-label={t("saver.toggle")}
+      aria-pressed="false"
+      data-label-enable={t("saver.enable")}
+      data-label-disable={t("saver.disable")}
+    >
+      ⚡
     </button>
 
     <script>
@@ -73,6 +91,41 @@ const t = useTranslations(lang);
         });
 
         updateThemeIcon();
+      }
+    </script>
+    <script>
+      const saverToggle = document.querySelector("#saver-toggle");
+
+      // Manual override for the auto-detected saver mode (uw-saver in Layout)
+      const syncSaverButton = () => {
+        if (!(saverToggle instanceof HTMLButtonElement)) return;
+        const on = document.documentElement.dataset.saver === "on";
+        saverToggle.setAttribute("aria-pressed", on ? "true" : "false");
+        const label = on
+          ? (saverToggle.dataset.labelDisable ?? "")
+          : (saverToggle.dataset.labelEnable ?? "");
+        if (label) saverToggle.setAttribute("aria-label", label);
+        saverToggle.classList.toggle("is-on", on);
+      };
+
+      if (saverToggle instanceof HTMLButtonElement) {
+        saverToggle.addEventListener("click", () => {
+          const on = document.documentElement.dataset.saver !== "on";
+          document.documentElement.dataset.saver = on ? "on" : "off";
+          try {
+            localStorage.setItem("uw-saver", on ? "on" : "off");
+          } catch {
+            // Storage unavailable: the attribute still applies for this visit.
+          }
+          syncSaverButton();
+        });
+
+        syncSaverButton();
+        // Stay in sync when auto-detection flips the attribute at runtime.
+        new MutationObserver(syncSaverButton).observe(
+          document.documentElement,
+          { attributes: true, attributeFilter: ["data-saver"] },
+        );
       }
     </script>
   </nav>
@@ -163,7 +216,8 @@ const t = useTranslations(lang);
     font-weight: 400;
     text-decoration: none;
   }
-  #theme-toggle {
+  #theme-toggle,
+  #saver-toggle {
     display: grid;
     place-items: center;
 
@@ -190,22 +244,31 @@ const t = useTranslations(lang);
       transform 0.15s ease;
   }
 
-  #theme-toggle:hover {
+  #theme-toggle:hover,
+  #saver-toggle:hover {
     color: var(--color-text-primary);
     background-color: var(--color-surface-secondary);
   }
 
-  #theme-toggle:active {
+  #saver-toggle.is-on {
+    color: var(--color-primary);
+    background-color: var(--color-surface-secondary);
+  }
+
+  #theme-toggle:active,
+  #saver-toggle:active {
     transform: translateY(1px);
   }
 
-  #theme-toggle:focus-visible {
+  #theme-toggle:focus-visible,
+  #saver-toggle:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
   @media (max-width: 700px) {
-    #theme-toggle {
+    #theme-toggle,
+    #saver-toggle {
       width: 2rem;
       height: 2rem;
       font-size: 1rem;

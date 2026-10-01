@@ -2,7 +2,7 @@
 title: Política de Cookies
 description: Conoce cómo Update Wise utiliza cookies y tecnologías similares para mejorar la experiencia de navegación y mantener el sitio funcionando correctamente.
 eyebrow: Cookies
-updateAt: 2026-10-01
+updatedAt: 2026-10-01
 ---
 
 ---

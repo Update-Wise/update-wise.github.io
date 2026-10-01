@@ -1,22 +1,38 @@
 @import "./tokens.css";
 
 [data-theme="dark"] {
-    --color-background        : var(--neutral-950);
-    --color-surface           : var(--neutral-800);
-    --color-surface-secondary : var(--neutral-900);
-    --color-surface-darkend   : var(--neutral-700);
-    --color-surface-outline   : var(--neutral-700);
+  --color-background: var(--neutral-950);
+  --color-surface: var(--neutral-800);
+  --color-surface-secondary: var(--neutral-900);
+  --color-surface-darkened: var(--neutral-700);
+  --color-surface-outline: var(--neutral-700);
 
-    --color-text-primary           : var(--neutral-50);
-    --color-text-secondary:        : var(--neutral-100);
-    --color-text-highligth         : var(--blue-300);
-    --color-text-ligther           : var(--neutral-950);
-    --color-text-ligther-highligth : var(--neutral-100);
+  --color-text-primary: var(--neutral-50);
+  --color-text-secondary: var(--neutral-100);
+  --color-text-highlight: var(--blue-300);
+  --color-text-lighter: var(--neutral-950);
+  --color-text-lighter-highlight: var(--neutral-100);
 
-    --color-primary         : var(--green-500);
-    --color-primary-darkend : var(--green-600);
+  --color-primary: var(--green-500);
+  --color-primary-darkened: var(--green-600);
 
-    --color-sucess : var(--green-500);
-    --color-warning: var(--amber-500);
-    --color-error  : var(--red-500);
+  --color-success: var(--green-500);
+  --color-warning: var(--amber-500);
+  --color-error: var(--red-500);
+
+  /* Expressive materials, all derived from the palette above */
+  --color-glow: rgb(32 236 102 / 26%);
+  --color-glow-strong: rgb(32 236 102 / 44%);
+  --color-glass: rgb(32 53 74 / 55%);
+  --gradient-brand: linear-gradient(120deg, var(--green-400), var(--cyan-400));
+  --gradient-surface: linear-gradient(
+    180deg,
+    var(--neutral-800),
+    var(--neutral-900)
+  );
+  --gradient-hero-wash: radial-gradient(
+    42rem 30rem at 12% 18%,
+    rgb(8 97 39 / 55%),
+    transparent 65%
+  );
 }

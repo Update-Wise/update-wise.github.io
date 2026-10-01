@@ -1,0 +1,93 @@
+---
+import { getLang, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(getLang(Astro.url));
+
+// Short proof points, looped for a seamless marquee
+const items = [
+  t("download.windows"),
+  t("download.linux"),
+  t("download.macos"),
+  t("hero.stat1"),
+  t("hero.stat2"),
+  t("hero.stat3"),
+  t("hero.badge"),
+];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    {[0, 1].map((copy) => (
+      <div class="ticker-copy" aria-hidden={copy === 1}>
+        {items.map((item) => (
+          <span class="ticker-item">
+            {item} <span class="ticker-star">✦</span>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ticker {
+    overflow: hidden;
+    width: 100%;
+    padding: 0.9rem 0;
+    border-block: 1px solid var(--color-surface-secondary);
+    background: var(--gradient-surface);
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+  }
+
+  html.js-anim .ticker-track {
+    animation: marquee 28s linear infinite;
+  }
+
+  .ticker:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .ticker-copy {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .ticker-item {
+    padding: 0 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-text-secondary);
+  }
+
+  .ticker-star {
+    margin-left: 2.5rem;
+    color: var(--color-primary);
+  }
+</style>

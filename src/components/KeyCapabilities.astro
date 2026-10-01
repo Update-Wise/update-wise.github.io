@@ -6,41 +6,55 @@ import { getLang, useTranslations } from "../i18n/utils";
 const t = useTranslations(getLang(Astro.url));
 
 const capabilities = [
-  { icon: "hardware", titleKey: "features.detect.title", descKey: "features.detect.desc" },
-  { icon: "analytics", titleKey: "features.recs.title", descKey: "features.recs.desc" },
-  { icon: "check", titleKey: "features.easy.title", descKey: "features.easy.desc" },
+  {
+    icon: "hardware",
+    titleKey: "features.detect.title",
+    descKey: "features.detect.desc",
+  },
+  {
+    icon: "analytics",
+    titleKey: "features.recs.title",
+    descKey: "features.recs.desc",
+  },
+  {
+    icon: "check",
+    titleKey: "features.easy.title",
+    descKey: "features.easy.desc",
+  },
 ] as const;
 ---
 
 <section id="key-capabilities">
-  <header class="section-header">
+  <header class="section-header" data-reveal>
     <p class="eyebrow">{t("features.eyebrow")}</p>
 
     <h2>{t("features.title")}</h2>
   </header>
 
   <ul class="capabilities">
-    {
-      capabilities.map((cap) => (
-        <li class="capability-card">
-          <span class="capability-icon" aria-hidden="true">
-            {cap.icon === "hardware" ? (
-              <Hardware />
-            ) : cap.icon === "analytics" ? (
-              <Analytics />
-            ) : (
-              "✓"
-            )}
-          </span>
+    {capabilities.map((cap, index) => (
+      <li
+        class="capability-card"
+        data-reveal
+        style={`--reveal-delay: ${index * 110}ms`}
+      >
+        <span class="capability-icon" aria-hidden="true">
+          {cap.icon === "hardware" ? (
+            <Hardware />
+          ) : cap.icon === "analytics" ? (
+            <Analytics />
+          ) : (
+            "✓"
+          )}
+        </span>
 
-          <div class="capability-content">
-            <h3>{t(cap.titleKey)}</h3>
+        <div class="capability-content">
+          <h3>{t(cap.titleKey)}</h3>
 
-            <p class="description">{t(cap.descKey)}</p>
-          </div>
-        </li>
-      ))
-    }
+          <p class="description">{t(cap.descKey)}</p>
+        </div>
+      </li>
+    ))}
   </ul>
 </section>
 
@@ -96,12 +110,21 @@ const capabilities = [
 
     padding: 1rem;
 
-    background-color: var(--color-surface);
+    background: var(--gradient-surface);
 
     border: 1px solid var(--color-surface-secondary);
     border-radius: 1.5rem;
 
     box-shadow: 0 2px 8px rgb(15 26 36 / 4%);
+
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .capability-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -10px var(--color-glow-strong);
   }
 
   .capability-icon {
@@ -119,7 +142,7 @@ const capabilities = [
 
     border-radius: 50%;
 
-    color: var(--color-text-ligther);
+    color: var(--color-text-lighter);
 
     font-size: 1rem;
     font-weight: 500;

@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import BlogPost from "../../../components/BlogPost.astro";
+import { localeList } from "../../../i18n/utils";
+import { defaultLang } from "../../../i18n/ui";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("blog");
+  const posts = [
+    ...new Set(entries.map((e) => e.id.split("/").slice(2).join("/"))),
+  ];
+
+  return posts.flatMap((post) =>
+    localeList
+      .filter((l) => l !== defaultLang)
+      .map((lang) => ({
+        params: { lang, post },
+        props: {
+          entry:
+            entries.find((e) => e.id === `${lang}/blog/${post}`) ??
+            entries.find((e) => e.id === `${defaultLang}/blog/${post}`),
+        },
+      })),
+  );
+}
+
+const { entry } = Astro.props;
+if (!entry)
+  throw new Error(
+    `Missing blog entry for ${Astro.params.lang}/${Astro.params.post}`,
+  );
+---
+
+<BlogPost entry={entry} />
