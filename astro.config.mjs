@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 
 // TODO: replace `site` with the final domain once available.
 export default defineConfig({
-  site: "https://update-wise.github.io",
+  site: "https://updatewise.github.io",
   integrations: [sitemap()],
   i18n: {
     defaultLocale: "es",
