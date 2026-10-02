@@ -57,6 +57,11 @@ body {
   text-transform: uppercase;
 }
 
+a {
+  text-decoration: none;
+  color: var(--color-text-primary)
+}
+
 /* Scroll reveal: elements hide only when JS animations are enabled,
    so no-JS visitors always see the final state. */
 html.js-anim [data-reveal] {
