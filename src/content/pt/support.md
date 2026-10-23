@@ -7,6 +7,10 @@ updatedAt: 2026-10-01
 
 # Suporte e contato
 
+## Contato
+
+Tem alguma dúvida, sugestão ou precisa de ajuda? Adoraríamos ouvir você. Envie um e-mail para nosso [endereço de contato](https://mail.google.com/mail/u/0/?to=contact@updatewise.com.co&su=Contato%20-%20UpdateWise&body=Ol%C3%A1%2C%20equipe%20da%20UpdateWise%3A&fs=1&tf=cm), e responderemos o mais breve possível.
+
 ## Antes de escrever
 
 A maioria das dúvidas está respondida nas [perguntas frequentes](/pt/faq). Se algo não funciona, confira primeiro o [status do serviço](/pt/status) para ver se é um incidente conhecido.
@@ -16,6 +20,7 @@ A maioria das dúvidas está respondida nas [perguntas frequentes](/pt/faq). Se 
 - **Problemas com o aplicativo:** abra um issue no [GitHub Issues](https://github.com/Update-Wise/Update-Wise-Main/issues) com os passos para reproduzi-lo.
 - **Ideias e melhorias:** proponha-as no [repositório](https://github.com/Update-Wise/Update-Wise-Main).
 - **Privacidade e dados:** veja a [política de privacidade](/pt/privacy) para conhecer seus direitos e opções.
+- **Email de suporte**: envie um e-mail para nosso [e-mail de suporte](https://mail.google.com/mail/?view=cm&to=support@updatewise.com.co&su=Assunto&body=Ol%C3%A1%2C%20bom%20dia.).
 
 ## Como reportar um erro
 
