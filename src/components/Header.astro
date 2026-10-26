@@ -16,7 +16,9 @@ const homePath = getLocalePath(lang);
 
 <header class="header">
   <div class="BrandHeader">
-    <div class="Logo" id="HeroLogo"></div>
+    <div class="Logo" id="HeroLogo">
+      <img class="Logo" id="RiseLogo" src="/RiseLogotransparente.webp" alt="Rise Sonriente / Logo">
+    </div>
     <a
       class="Title"
       id="HeroTitle"
@@ -191,12 +193,17 @@ const homePath = getLocalePath(lang);
     height: fit-content;
   }
 
+  #RiseLogo {
+    height: 100%;
+    width: 100%;
+  }
   .Logo {
-    height: 4rem;
+    height: 6rem;
     aspect-ratio: 1;
   }
 
   #GithubLogo {
+    height: 4rem;
     fill: var(--color-text-secondary);
     transition: fill 0.5s ease-out;
   }
@@ -206,7 +213,6 @@ const homePath = getLocalePath(lang);
   }
 
   #HeroLogo {
-    background-color: #d9d9d9;
     border-radius: 0.75rem;
   }
 
