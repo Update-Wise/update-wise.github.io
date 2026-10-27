@@ -40,14 +40,11 @@ const pageUrl = (l: (typeof localeList)[number]) =>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
     <SEO
-      title="UpdateWise — Actualiza tu PC con criterio"
-      description="Conoce tu hardware, evalúa mejoras y descubre qué actualización se adapta a tus necesidades."
+      title={title}
+      description={description ?? "Conoce tu hardware, descubre qué puedes mejorar y encuentra opciones compatibles según tu uso y tu presupuesto."}
+      url={canonical}
     />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
     <meta property="og:locale" content={htmlLang[lang].replace("-", "_")} />
     {localeList
       .filter((l) => l !== lang)
@@ -57,8 +54,7 @@ const pageUrl = (l: (typeof localeList)[number]) =>
           content={htmlLang[l].replace("-", "_")}
         />
       ))}
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={title} />
+      
     {description && <meta name="twitter:description" content={description} />}
 
     {localeList.map((l) => (
