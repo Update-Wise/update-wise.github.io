@@ -36,9 +36,6 @@ const pageUrl = (l: (typeof localeList)[number]) =>
     <link rel="icon" href="/favicon.webp" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0D933B" />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
-    <link rel="canonical" href={canonical} />
     <SEO
       title={title}
       description={description ?? "Conoce tu hardware, descubre qué puedes mejorar y encuentra opciones compatibles según tu uso y tu presupuesto."}
@@ -55,8 +52,6 @@ const pageUrl = (l: (typeof localeList)[number]) =>
         />
       ))}
       
-    {description && <meta name="twitter:description" content={description} />}
-
     {localeList.map((l) => (
       <link rel="alternate" hreflang={htmlLang[l]} href={pageUrl(l)} />
     ))}
