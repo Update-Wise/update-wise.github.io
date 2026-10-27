@@ -1,45 +1,49 @@
-<!--
-  Interactive mascot placeholder.
-  Motion (tilt, parallax, squash) lives on the wrapper, so when the final
-  artwork arrives only the .mascot-sprite box needs swapping for the PNG.
--->
-<!-- TODO(brand): replace .mascot-sprite with the mascot PNG <img>. -->
+---
+import Rise from "./rise.astro"
+---
 
 <div class="mascot" aria-hidden="true" data-mascot>
   <div class="mascot-tilt" data-mascot-tilt>
     <div class="mascot-sprite" data-mascot-sprite>
-      <span class="mascot-eye left" data-mascot-eye>
-        <span class="pupil" data-mascot-pupil></span>
-      </span>
-      <span class="mascot-eye right" data-mascot-eye>
-        <span class="pupil" data-mascot-pupil></span>
-      </span>
-      <span class="mascot-smile" data-mascot-smile></span>
-      <span class="cheek left" data-mascot-cheek></span>
-      <span class="cheek right" data-mascot-cheek></span>
+      <Rise class="mascot-image" alt="rise el gato" />
     </div>
   </div>
   <div class="mascot-shadow" data-mascot-shadow></div>
 </div>
 
 <script>
-  // Delight without cost: every reaction below is skipped for reduced
-  // motion, saver mode, touch-only coarse pointers handled via pointer
-  // events, and the sprite stays put when JS is off.
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const mascot = document.querySelector("[data-mascot]");
-  const tilt = document.querySelector("[data-mascot-tilt]");
+
+  const mascot = document.querySelector<HTMLElement>("[data-mascot]");
+  const tilt = document.querySelector<HTMLElement>("[data-mascot-tilt]");
+
   const pupils = [
     ...document.querySelectorAll<HTMLElement>("[data-mascot-pupil]"),
   ];
-  const eyes = [...document.querySelectorAll<HTMLElement>("[data-mascot-eye]")];
-  const smile = document.querySelector("[data-mascot-smile]");
+
+  const eyes = [
+    ...document.querySelectorAll<HTMLElement>("[data-mascot-eye]"),
+  ];
+
+  const smile = document.querySelector<HTMLElement>("[data-mascot-smile]");
+
   const cheeks = [
     ...document.querySelectorAll<HTMLElement>("[data-mascot-cheek]"),
   ];
-  const shadow = document.querySelector("[data-mascot-shadow]");
+
+  const shadow = document.querySelector<HTMLElement>("[data-mascot-shadow]");
+
+  const lightning = mascot?.querySelector<SVGElement>("#rise-lightning");
+
+  const lightningShapes = lightning
+    ? [
+        ...lightning.querySelectorAll<SVGElement>(
+          "path, polygon, polyline, rect, circle, ellipse",
+        ),
+      ]
+    : [];
 
   if (
     !reduceMotion &&
@@ -64,11 +68,127 @@
       pupilX: 0,
       pupilY: 0,
     };
+
     const PUPIL_RANGE = 4;
     const TILT_RANGE = 9;
     const PARALLAX_RANGE = 10;
 
-    const saverOn = () => document.documentElement.dataset.saver === "on";
+    // Distancia al centro del rayo, en píxeles CSS.
+    const LIGHTNING_FAR = 220;
+    const LIGHTNING_NEAR = 90;
+
+    // Paleta de Rise.
+    const LIGHTNING_GREEN = [32, 236, 102]; // #20EC66
+    const LIGHTNING_YELLOW = [248, 191, 36]; // #F8BF24
+    const LIGHTNING_RED = [239, 68, 68]; // #EF4444
+
+    let lightningColor = "";
+
+    const saverOn = () =>
+      document.documentElement.dataset.saver === "on";
+
+    const resetLightning = () => {
+      for (const shape of lightningShapes) {
+        shape.style.removeProperty("fill");
+      }
+
+      if (lightning instanceof SVGElement) {
+        lightning.style.removeProperty("fill");
+        lightning.style.removeProperty("color");
+        lightning.style.removeProperty("filter");
+      }
+
+      lightningColor = "";
+    };
+
+    const updateLightning = (
+      clientX: number,
+      clientY: number,
+    ) => {
+      if (
+        !(lightning instanceof SVGElement) ||
+        lightningShapes.length === 0
+      ) {
+        return;
+      }
+
+      const rect = lightning.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const distance = Math.hypot(
+        clientX - centerX,
+        clientY - centerY,
+      );
+
+      /*
+       * Lejos: verde.
+       * Entre 220 y 90 px: verde -> amarillo -> rojo.
+       * A 90 px o menos: rojo.
+       */
+      const proximity = Math.max(
+        0,
+        Math.min(
+          1,
+          (LIGHTNING_FAR - distance) /
+            (LIGHTNING_FAR - LIGHTNING_NEAR),
+        ),
+      );
+
+      // Interpolación suave entre los tres colores.
+      const from =
+        proximity < 0.5
+          ? LIGHTNING_GREEN
+          : LIGHTNING_YELLOW;
+
+      const to =
+        proximity < 0.5
+          ? LIGHTNING_YELLOW
+          : LIGHTNING_RED;
+
+      const t =
+        proximity < 0.5
+          ? proximity * 2
+          : (proximity - 0.5) * 2;
+
+      const rgb = from.map((channel, index) =>
+        Math.round(
+          channel + (to[index] - channel) * t,
+        ),
+      );
+
+      const color = `rgb(${rgb.join(", ")})`;
+
+      if (color === lightningColor) return;
+
+      // Cambia el relleno real de las formas del SVG.
+      for (const shape of lightningShapes) {
+        shape.style.setProperty("fill", color);
+      }
+
+      /*
+       * Resplandor de tres capas:
+       * 1. Núcleo intenso.
+       * 2. Halo intermedio.
+       * 3. Difuminado exterior amplio.
+       *
+       * Todas las capas adoptan el color del rayo.
+       */
+      const glowCore = 5 + proximity * 5;
+      const glowMid = 18 + proximity * 12;
+      const glowFar = 42 + proximity * 18;
+
+      lightning.style.setProperty(
+        "filter",
+        [
+          `drop-shadow(0 0 ${glowCore.toFixed(1)}px ${color})`,
+          `drop-shadow(0 0 ${glowMid.toFixed(1)}px ${color})`,
+          `drop-shadow(0 0 ${glowFar.toFixed(1)}px color-mix(in srgb, ${color} 32%, transparent)`,
+        ].join(" "),
+      );
+
+      lightningColor = color;
+    };
 
     const scheduleBlink = () => {
       window.setTimeout(
@@ -79,29 +199,46 @@
         2600 + Math.random() * 3200,
       );
     };
+
     scheduleBlink();
 
     window.addEventListener(
       "pointermove",
       (event) => {
         if (saverOn()) return;
+
         state.lastMove = performance.now();
-        // Gaze: pupils track the cursor from the sprite center.
+
+        // Las pupilas siguen el cursor.
         const box = mascot.getBoundingClientRect();
         const cx = box.left + box.width / 2;
         const cy = box.top + box.height / 2;
+
         const dx = event.clientX - cx;
         const dy = event.clientY - cy;
         const dist = Math.hypot(dx, dy) || 1;
-        state.pupilX = (dx / dist) * Math.min(PUPIL_RANGE, dist / 40);
-        state.pupilY = (dy / dist) * Math.min(PUPIL_RANGE, dist / 40);
-        // Tilt + parallax from the viewport position (scene-wide reaction).
-        const nx = (event.clientX / window.innerWidth - 0.5) * 2;
-        const ny = (event.clientY / window.innerHeight - 0.5) * 2;
+
+        state.pupilX =
+          (dx / dist) * Math.min(PUPIL_RANGE, dist / 40);
+
+        state.pupilY =
+          (dy / dist) * Math.min(PUPIL_RANGE, dist / 40);
+
+        // Inclinación y parallax.
+        const nx =
+          (event.clientX / window.innerWidth - 0.5) * 2;
+
+        const ny =
+          (event.clientY / window.innerHeight - 0.5) * 2;
+
         state.try_ = nx * TILT_RANGE;
         state.trx = -ny * (TILT_RANGE * 0.7);
+
         state.tpx = -nx * PARALLAX_RANGE;
         state.tpy = -ny * (PARALLAX_RANGE * 0.6);
+
+        // Actualiza el color y el halo del rayo.
+        updateLightning(event.clientX, event.clientY);
       },
       { passive: true },
     );
@@ -109,83 +246,132 @@
     document.addEventListener("pointerleave", () => {
       state.pupilX = 0;
       state.pupilY = 0;
+
       state.tpx = 0;
       state.tpy = 0;
       state.trx = 0;
       state.try_ = 0;
+
+      resetLightning();
     });
 
     mascot.addEventListener("pointerenter", () => {
       state.thappy = 1;
     });
+
     mascot.addEventListener("pointerleave", () => {
       state.thappy = 0;
     });
+
     mascot.addEventListener("pointerdown", () => {
       if (saverOn()) return;
+
       state.squash = 1;
       state.blink = 1;
       state.hopStart = performance.now();
     });
 
-    const lerp = (from: number, to: number, rate: number) =>
-      from + (to - from) * rate;
+    const lerp = (
+      from: number,
+      to: number,
+      rate: number,
+    ) => from + (to - from) * rate;
 
     const frame = (now: number) => {
       if (saverOn()) {
         tilt.style.transform = "";
-        for (const pupil of pupils) pupil.style.transform = "";
+
+        for (const pupil of pupils) {
+          pupil.style.transform = "";
+        }
+
+        resetLightning();
         requestAnimationFrame(frame);
         return;
       }
-      // Ease every channel toward its target for a soft, weighty feel.
+
+      // Suaviza el movimiento.
       state.px = lerp(state.px, state.tpx, 0.08);
       state.py = lerp(state.py, state.tpy, 0.08);
+
       state.rx = lerp(state.rx, state.trx, 0.08);
       state.ry = lerp(state.ry, state.try_, 0.08);
-      state.happy = lerp(state.happy, state.thappy, 0.12);
+
+      state.happy = lerp(
+        state.happy,
+        state.thappy,
+        0.12,
+      );
+
       state.squash *= 0.88;
 
-      // Hop: a 420ms sine jump on press.
+      // Pequeño salto al pulsar.
       let hop = 0;
+
       if (state.hopStart >= 0) {
         const t = (now - state.hopStart) / 420;
-        if (t >= 1) state.hopStart = -1;
-        else hop = -Math.sin(t * Math.PI) * 16;
+
+        if (t >= 1) {
+          state.hopStart = -1;
+        } else {
+          hop = -Math.sin(t * Math.PI) * 16;
+        }
       }
-      // Idle bob after 3s without mouse movement.
-      const idle = now - state.lastMove > 3000 ? Math.sin(now / 620) * 4 : 0;
+
+      // Movimiento sutil cuando no se usa el cursor.
+      const idle =
+        now - state.lastMove > 3000
+          ? Math.sin(now / 620) * 4
+          : 0;
 
       const sx = 1 + state.squash * 0.16;
       const sy = 1 - state.squash * 0.2;
+
       tilt.style.transform =
         `translate3d(${state.px.toFixed(2)}px, ${(state.py + idle + hop).toFixed(2)}px, 0) ` +
-        `rotateX(${state.rx.toFixed(2)}deg) rotateY(${state.ry.toFixed(2)}deg) ` +
+        `rotateX(${state.rx.toFixed(2)}deg) ` +
+        `rotateY(${state.ry.toFixed(2)}deg) ` +
         `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
 
       for (const pupil of pupils) {
-        pupil.style.transform = `translate(${state.pupilX.toFixed(2)}px, ${state.pupilY.toFixed(2)}px)`;
+        pupil.style.transform =
+          `translate(${state.pupilX.toFixed(2)}px, ${state.pupilY.toFixed(2)}px)`;
       }
 
-      // Blink: quick scaleY dip, eased out.
-      if (state.blink > 0) state.blink = Math.max(0, state.blink - 0.12);
-      const lid = 1 - Math.sin(state.blink * Math.PI) * 0.9;
+      // Parpadeo.
+      if (state.blink > 0) {
+        state.blink = Math.max(0, state.blink - 0.12);
+      }
+
+      const lid =
+        1 - Math.sin(state.blink * Math.PI) * 0.9;
+
       for (const eye of eyes) {
         eye.style.transform = `scaleY(${lid.toFixed(3)})`;
       }
+
       if (smile instanceof HTMLElement) {
-        smile.style.transform = `scale(${(1 + state.happy * 0.25).toFixed(3)})`;
+        smile.style.transform =
+          `scale(${(1 + state.happy * 0.25).toFixed(3)})`;
       }
+
       for (const cheek of cheeks) {
         cheek.style.opacity = state.happy.toFixed(3);
       }
+
       if (shadow instanceof HTMLElement) {
         const lift = Math.abs(idle + hop);
-        shadow.style.transform = `scaleX(${(1 - lift / 160).toFixed(3)})`;
-        shadow.style.opacity = (0.5 - lift / 200).toFixed(3);
+
+        shadow.style.transform =
+          `scaleX(${(1 - lift / 160).toFixed(3)})`;
+
+        shadow.style.opacity =
+          (0.5 - lift / 200).toFixed(3);
       }
+
       requestAnimationFrame(frame);
     };
+
     requestAnimationFrame(frame);
   }
 </script>
@@ -207,14 +393,39 @@
 
   .mascot-sprite {
     position: relative;
-    width: 7rem;
-    height: 7rem;
-    background: var(--gradient-surface);
-    border: 1px solid var(--color-surface-outline);
-    border-radius: 1.75rem;
-    box-shadow:
-      0 18px 40px -12px var(--color-glow-strong),
-      inset 0 2px 0 rgb(255 255 255 / 25%);
+    width: 8rem;
+    height: 8rem;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .mascot-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* Evita seleccionar o arrastrar la mascota. */
+  .mascot,
+  .mascot * {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  :global(.mascot svg),
+  :global(.mascot img) {
+    user-select: none;
+    -webkit-user-drag: none;
   }
 
   html.js-anim .mascot-sprite {
@@ -226,6 +437,7 @@
     100% {
       translate: 0 0;
     }
+
     50% {
       translate: 0 -5px;
     }
@@ -292,7 +504,11 @@
   .mascot-shadow {
     height: 0.8rem;
     margin: 0.45rem 1rem 0;
-    background: radial-gradient(closest-side, rgb(0 0 0 / 35%), transparent);
+    background: radial-gradient(
+      closest-side,
+      rgb(0 0 0 / 35%),
+      transparent
+    );
     border-radius: 50%;
     opacity: 0.5;
   }
@@ -307,30 +523,6 @@
     .mascot-sprite {
       width: 5.5rem;
       height: 5.5rem;
-      border-radius: 1.4rem;
-    }
-
-    .mascot-eye {
-      top: 1.5rem;
-      width: 1.2rem;
-      height: 1.2rem;
-    }
-
-    .mascot-eye.left {
-      left: 1.1rem;
-    }
-
-    .mascot-eye.right {
-      right: 1.1rem;
-    }
-
-    .mascot-smile {
-      bottom: 1.1rem;
-      width: 1.6rem;
-    }
-
-    .cheek {
-      bottom: 1.4rem;
     }
   }
 </style>
