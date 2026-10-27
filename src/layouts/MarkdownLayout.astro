@@ -1,6 +1,7 @@
 ---
 // Header and Footer come from Layout, so they are not duplicated here.
 import Layout from "./Layout.astro";
+import Mermaid from "../components/Mermaid.astro";
 import { getLang, useTranslations } from "../i18n/utils";
 import type { MarkdownHeading } from "astro";
 
@@ -128,6 +129,7 @@ for (const h of rawHeadings) {
       <article class="markdown-content">
         <slot />
       </article>
+      <Mermaid />
     </div>
   </main>
 </Layout>
