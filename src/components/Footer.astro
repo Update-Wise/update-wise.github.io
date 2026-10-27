@@ -52,9 +52,8 @@ const homePath = getLocalePath(lang);
       <div class="footer-column">
         <h3>{t("footer.product")}</h3>
 
-        <a href={`${homePath}#how-it-works`}>{t("footer.product.how")}</a>
-        <a href={`${homePath}#key-capabilities`}>
-          {t("footer.product.features")}
+        <a href={getDocPath(lang, "howitworks")}>{t("footer.product.how")}</a>
+        <a href={getDocPath(lang, "chars")}>{t("footer.product.features")}
         </a>
         <a href={`${homePath}#pricing`}>{t("footer.product.pricing")}</a>
         <a href={getDownloadPath(lang)}>{t("footer.product.download")}</a>

@@ -1,0 +1,152 @@
+
+<script>
+  import mermaid from "mermaid";
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: "base",
+    securityLevel: "strict",
+    fontFamily: "Inter, sans-serif",
+    flowchart: {
+      htmlLabels: true,
+      curve: "linear",
+      padding: 12,
+      nodeSpacing: 36,
+      rankSpacing: 44,
+    },
+    themeVariables: {
+      darkMode: true,
+      background: "#030712",
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+
+      primaryColor: "#102b1b",
+      primaryTextColor: "#f9fafb",
+      primaryBorderColor: "#20ec66",
+
+      secondaryColor: "#102b32",
+      secondaryTextColor: "#ecfeff",
+      secondaryBorderColor: "#22d3ee",
+
+      tertiaryColor: "#272016",
+      tertiaryTextColor: "#fffbeb",
+      tertiaryBorderColor: "#f8bf24",
+
+      lineColor: "#20ec66",
+      textColor: "#f9fafb",
+      mainBkg: "#102b1b",
+      nodeBorder: "#20ec66",
+      clusterBkg: "#111827",
+      clusterBorder: "#374151",
+      edgeLabelBackground: "#111827",
+      titleColor: "#f9fafb",
+      noteBkgColor: "#102b32",
+      noteTextColor: "#ecfeff",
+      noteBorderColor: "#22d3ee",
+    },
+  });
+
+  async function renderMermaid() {
+    const blocks = document.querySelectorAll(
+      'pre[data-language="mermaid"], pre code.language-mermaid, pre code.lang-mermaid',
+    );
+
+    for (const block of blocks) {
+      const pre =
+        block instanceof HTMLPreElement ? block : block.closest("pre");
+
+      if (!pre || pre.dataset.mermaidProcessed === "true") continue;
+
+      const source =
+        pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
+
+      const container = document.createElement("div");
+      container.className = "mermaid";
+      container.textContent = source.trim();
+
+      pre.dataset.mermaidProcessed = "true";
+      pre.replaceWith(container);
+    }
+
+    const diagrams = document.querySelectorAll(
+      ".mermaid:not([data-processed])",
+    );
+
+    if (!diagrams.length) return;
+
+    try {
+      await mermaid.run({ nodes: diagrams });
+    } catch (error) {
+      console.error("Error al renderizar Mermaid:", error);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderMermaid, {
+      once: true,
+    });
+  } else {
+    renderMermaid();
+  }
+
+  document.addEventListener("astro:page-load", renderMermaid);
+</script>
+
+<style>
+  :global(.markdown-content .mermaid) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    margin: 2rem 0;
+    padding: 1.5rem;
+
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-surface-outline);
+    border-radius: 0.75rem;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary-darkened) transparent;
+  }
+
+  :global(.markdown-content .mermaid svg) {
+    display: block;
+    width: 100%;
+    min-width: 320px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  :global(.markdown-content .mermaid .edgePath .path) {
+    stroke: var(--color-primary);
+    stroke-width: 1.5px;
+  }
+
+  :global(.markdown-content .mermaid marker path) {
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+  }
+
+  :global(.markdown-content .mermaid .cluster rect) {
+    fill: var(--color-surface);
+    stroke: var(--color-surface-outline);
+    stroke-dasharray: 4 4;
+    rx: 8px;
+  }
+
+  :global(.markdown-content .mermaid .edgeLabel rect) {
+    fill: var(--color-surface-secondary);
+  }
+
+  @media (max-width: 640px) {
+    :global(.markdown-content .mermaid) {
+      padding: 1rem 0.5rem;
+      border-radius: 0.5rem;
+    }
+
+    :global(.markdown-content .mermaid svg) {
+      min-width: 460px;
+    }
+  }
+</style>
