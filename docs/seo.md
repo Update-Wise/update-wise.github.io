@@ -14,10 +14,6 @@ Implemented in `src/layouts/Layout.astro` (per-page `slug` flows in from
   `public/robots.txt` references it.
 
 ## Pending TODOs
-
-- **Domain:** `site` in `astro.config.mjs` is `https://updatewise.example.com`
-  (placeholder). Replace it and the `Sitemap:` URL in `robots.txt` once the
-  final domain exists — canonicals, hreflang, and sitemap all derive from it.
 - **Artwork:** add a 1200×630 `og:image` (`TODO(art)` in `Layout.astro`).
 
 ## Verification
