@@ -32,13 +32,11 @@ const homePath = getLocalePath(lang);
             rel="noopener noreferrer"
             aria-label="GitHub"
           >
-            <span>
               <Github class="Github" />
-            </span>
           </a>
 
           <a href="https://x.com/update_wise" aria-label="Twitter">
-            <span>𝕏</span>
+            <span class="twitter">𝕏</span>
           </a>
 
           <a href="https://discord.gg/JR2ZsTSaj" aria-label="Discord">
@@ -276,6 +274,10 @@ const homePath = getLocalePath(lang);
   .footer-legal a:hover {
     color: var(--neutral-0);
   }
+  .twitter {
+    font-size: 1.5rem !important;
+  }
+
 
   @media (max-width: 800px) {
     .footer-content {
